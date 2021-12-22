@@ -1,60 +1,160 @@
-name: 'TODO: Run <linter-name> with reviewdog'
-description: 'TODO: 🐶 Run <linter-name> with reviewdog on pull requests to improve code review experience.'
-author: 'TODO: <your-name>'
+name: 'Run sqlfluff with reviewdog'
+description: '🐶 Run sqlfluff with reviewdog on pull requests to improve code review experience.'
+author: 'yu-iskw'
 inputs:
   github_token:
     description: 'GITHUB_TOKEN'
+    required: true
     default: '${{ github.token }}'
-  workdir:
+  working-directory:
     description: 'Working directory relative to the root directory.'
+    required: false
     default: '.'
   ### Flags for reviewdog ###
   level:
     description: 'Report level for reviewdog [info,warning,error]'
+    required: false
     default: 'error'
   reporter:
     description: 'Reporter of reviewdog command [github-check,github-pr-review].'
+    required: false
     default: 'github-check'
   filter_mode:
     description: |
       Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
-      Default is added.
-    default: 'added'
+      Default is file.
+    required: false
+    default: 'file'
   fail_on_error:
     description: |
       Exit code for reviewdog when errors are found [true,false]
       Default is `false`.
+    required: false
     default: 'false'
   reviewdog_flags:
     description: 'Additional reviewdog flags'
+    required: false
     default: ''
-  ### Flags for <linter-name> ###
-  locale:
-    description: '-locale flag of misspell. (US/UK)'
+  ### Flags for sqlfluff ###
+  sqlfluff_version:
+    description: 'sqlfluff version. Use the latest version if not set.'
+    required: false
     default: ''
+  paths:
+    description: |
+      PATH is the path to a sql file or directory to lint based on the working directory.
+      This can be either a file ('path/to/file.sql'), a path ('directory/of/sql/files'), a single ('-') character to indicate reading from *stdin* or a dot/blank ('.'/' ') which will be interpreted like passing the current working directory as a path argument.
+    required: true
+  encoding:
+    description: 'Specifiy encoding to use when reading and writing files. Defaults to autodetect.'
+    required: false
+    default: ''
+  config:
+    description: |
+      Include additional config file.
+      By default the config is generated from the standard configuration files described in the documentation.
+      This argument allows you to specify an additional configuration file that overrides the standard configuration files.
+      N.B. cfg format is required.
+    required: false
+    default: ''
+  exclude-rules:
+    description: |
+      Exclude specific rules.
+      For example specifying –exclude-rules L001 will remove rule L001 (Unnecessary trailing whitespace) from the set of considered rules.
+      This could either be the allowlist, or the general set if there is no specific allowlist.
+      Multiple rules can be specified with commas e.g. –exclude-rules L001,L002 will exclude violations of rule L001 and rule L002.
+    required: false
+    default: ''
+  rules:
+    description: |
+      Narrow the search to only specific rules.
+      For example specifying –rules L001 will only search for rule L001 (Unnecessary trailing whitespace).
+      Multiple rules can be specified with commas e.g. –rules L001,L002 will specify only looking for violations of rule L001 and rule L002.
+    required: false
+    default: ''
+  templater:
+    description: 'The templater to use'
+    required: false
+    default: ''
+  disable-noqa:
+    description: 'Set this flag to ignore inline noqa comments.'
+    required: false
+    default: ''
+  dialect:
+    description: 'The dialect of SQL to lint'
+    required: false
+    default: ''
+#  annotation-level:
+#    description: |
+#      When format is set to github-annotation, default annotation level.
+#      Options
+#      notice | warning | failure
+#    required: false
+#    default: ''
+#  nofail:
+#    description: |
+#      If set, the exit code will always be zero, regardless of violations found.
+#      This is potentially useful during rollout.
+#    required: false
+#    default: ''
+#  disregard-sqlfluffignores:
+#    description: 'Perform the operation regardless of .sqlfluffignore configurations'
+#    required: false
+#    default: ''
+  processes:
+    description: 'The number of parallel processes to run.'
+    required: false
+    default: "2"
+
+outputs:
+  sqlfluff-results:
+    description: 'The JSON object string of sqlfluff results'
+    value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.sqlfluff-results }}
+  sqlfluff-exit-code:
+    description: 'The exit code of sqlfluff'
+    value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.sqlfluff-exit-code }}
+  sqlfluff-results-rdjson:
+    description: 'The JSON object string of sqlfluff results'
+    value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.sqlfluff-results-rdjson }}
+  reviewdog-return-code:
+    description: 'The exit code of reviewdog'
+    value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.reviewdog-return-code }}
+
 runs:
   using: 'composite'
   steps:
     - uses: reviewdog/action-setup@v1
       with:
         reviewdog_version: v0.13.0
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
     - run: $GITHUB_ACTION_PATH/script.sh
+      id: sqlfluff-with-reviewdog-in-composite
       shell: bash
       env:
         # INPUT_<VARIABLE_NAME> is not available in Composite run steps
         # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
         INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
-        INPUT_LEVEL: ${{ inputs.level }}
-        INPUT_REPORTER: ${{ inputs.reporter }}
-        INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
-        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
-        INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
-        INPUT_ESLINT_FLAGS: ${{ inputs.eslint_flags }}
-        INPUT_WORKDIR: ${{ inputs.workdir }}
-        INPUT_TOOL_NAME: ${{ inputs.tool_name }}
+        REVIEWDOG_LEVEL: ${{ inputs.level }}
+        REVIEWDOG_REPORTER: ${{ inputs.reporter }}
+        REVIEWDOG_FILTER_MODE: ${{ inputs.filter_mode }}
+        REVIEWDOG_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+        REVIEWDOG_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
+        REVIEWDOG_ESLINT_FLAGS: ${{ inputs.eslint_flags }}
+        REVIEWDOG_WORKDIR: ${{ inputs.working-directory }}
+        REVIEWDOG_TOOL_NAME: ${{ inputs.tool_name }}
+        SQLFLUFF_VERSION: ${{ inputs.sqlfluff_version }}
+        SQLFLUFF_CONFIG: ${{ inputs.config }}
+        SQLFLUFF_PATHS: ${{ inputs.paths }}
+        SQLFLUFF_PROCESSES: ${{ inputs.processes }}
+        SQLFLUFF_EXCLUDE_RULES: ${{ inputs.exclude-rules }}
+        SQLFLUFF_RULES: ${{ inputs.rules }}
+        SQLFLUFF_TEMPLATER: ${{ inputs.templater }}
+        SQLFLUFF_DISABLE_NOQA: ${{ inputs.disable-noqa }}
+        SQLFLUFF_DIALECT: ${{ inputs.dialect }}
 
 # Ref: https://haya14busa.github.io/github-action-brandings/
-# TODO: update branding if you want.
 branding:
   icon: 'check'
   color: 'blue'

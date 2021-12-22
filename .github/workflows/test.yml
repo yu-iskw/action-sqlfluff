@@ -4,47 +4,73 @@ on:
     branches:
       - main
   pull_request:
+
 jobs:
   test-check:
-    name: runner / <linter-name> (github-check)
+    name: runner / sqlfluff (github-check)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+        id: list-sql
         with:
           github_token: ${{ secrets.github_token }}
+          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-check
-          level: info
-          locale: "US"
+          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
+          paths: 'models'
+      - name: "Test outputs"
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-exit-code }}'
+          echo '${{ steps.lint-sql.outputs.reviewdog-exit-code }}'
 
   test-pr-check:
     if: github.event_name == 'pull_request'
-    name: runner / <linter-name> (github-pr-check)
+    name: runner / sqlfluff (github-pr-check)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+        id: list-sql
         with:
           github_token: ${{ secrets.github_token }}
+          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-pr-check
-          level: warning
-          locale: "US"
-          workdir: ./testdata/subdir/
+          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
+          paths: 'models'
+      - name: "Test outputs"
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-exit-code }}'
+          echo '${{ steps.lint-sql.outputs.reviewdog-exit-code }}'
 
   test-pr-review:
     if: github.event_name == 'pull_request'
-    name: runner / <linter-name> (github-pr-review)
+    name: runner / sqlfluff (github-pr-review)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+        id: list-sql
         continue-on-error: true
         with:
           github_token: ${{ secrets.github_token }}
+          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-pr-review
-          level: error
-          locale: "US"
-          reviewdog_flags: -filter-mode=file -fail-on-error
+          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
+          paths: 'models'
+      - name: "Test outputs"
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-exit-code }}'
+          echo '${{ steps.lint-sql.outputs.reviewdog-exit-code }}'
       - name: check the exit code
         if: ${{ !success() }}
         run: echo 'The previous step should fail' && exit 1
