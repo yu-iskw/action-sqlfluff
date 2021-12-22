@@ -1,28 +1,17 @@
 # action-sqlfluff
 
 <!-- TODO: replace reviewdog/yu-iskw/action-sqlfluff with your repo name -->
-[![Test](https://github.com/reviewdog/yu-iskw/action-sqlfluff/workflows/Test/badge.svg)](https://github.com/reviewdog/yu-iskw/action-sqlfluff/actions?query=workflow%3ATest)
-[![reviewdog](https://github.com/reviewdog/yu-iskw/action-sqlfluff/workflows/reviewdog/badge.svg)](https://github.com/reviewdog/yu-iskw/action-sqlfluff/actions?query=workflow%3Areviewdog)
-[![depup](https://github.com/reviewdog/yu-iskw/action-sqlfluff/workflows/depup/badge.svg)](https://github.com/reviewdog/yu-iskw/action-sqlfluff/actions?query=workflow%3Adepup)
-[![release](https://github.com/reviewdog/yu-iskw/action-sqlfluff/workflows/release/badge.svg)](https://github.com/reviewdog/yu-iskw/action-sqlfluff/actions?query=workflow%3Arelease)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/yu-iskw/action-sqlfluff?logo=github&sort=semver)](https://github.com/reviewdog/yu-iskw/action-sqlfluff/releases)
+[![Test](https://github.com/yu-iskw/action-sqlfluff/workflows/Test/badge.svg)](https://github.com/yu-iskw/action-sqlfluff/actions?query=workflow%3ATest)
+[![reviewdog](https://github.com/yu-iskw/action-sqlfluff/workflows/reviewdog/badge.svg)](https://github.com/yu-iskw/action-sqlfluff/actions?query=workflow%3Areviewdog)
+[![depup](https://github.com/yu-iskw/action-sqlfluff/workflows/depup/badge.svg)](https://github.com/yu-iskw/action-sqlfluff/actions?query=workflow%3Adepup)
+[![release](https://github.com/yu-iskw/action-sqlfluff/workflows/release/badge.svg)](https://github.com/yu-iskw/action-sqlfluff/actions?query=workflow%3Arelease)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/yu-iskw/action-sqlfluff?logo=github&sort=semver)](https://github.com/yu-iskw/action-sqlfluff/releases)
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 ![github-pr-review demo](./docs/images/github-pr-review-demo.png)
 
-This is a template repository for
-[reviewdog](https://github.com/reviewdog/reviewdog) action with release
-automation based on [action composition](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action).
-Click `Use this template` button to create your reviewdog action :dog:!
-
-If you want to create your own reviewdog action from scratch without using this
-template, please check and copy release automation flow.
-It's important to manage release workflow and sync reviewdog version for all
-reviewdog actions.
-
-This repo contains a sample action to run [misspell](https://github.com/client9/misspell).
-
-This is a github action to 
+This is a github action to lint SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
+The action automatically leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
 
 ## Input
 
