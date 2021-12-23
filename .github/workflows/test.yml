@@ -9,8 +9,14 @@ jobs:
   test-check:
     name: runner / sqlfluff (github-check)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.8, 3.9, 3.10]
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
       - uses: ./
         id: list-sql
         with:
@@ -31,8 +37,14 @@ jobs:
     if: github.event_name == 'pull_request'
     name: runner / sqlfluff (github-pr-check)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.8, 3.9, 3.10]
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
       - uses: ./
         id: list-sql
         with:
@@ -53,8 +65,14 @@ jobs:
     if: github.event_name == 'pull_request'
     name: runner / sqlfluff (github-pr-review)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.8, 3.9, 3.10]
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
       - uses: ./
         id: list-sql
         continue-on-error: true
