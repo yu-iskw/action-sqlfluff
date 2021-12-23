@@ -5,14 +5,12 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
-echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-pip install -r "${SCRIPT_DIR}/requirements.txt"
-sqlfluff --version
-echo '::endgroup::'
-
 echo '::group:: Running sqlfluff 🐶 ...'
 # Allow failures now, as reviewdog handles them
 set +Eeuo pipefail
+
+# Make sure the version of sqlfluff
+sqlfluff --version
 
 lint_results="sqlfluff-lint.json"
 # shellcheck disable=SC2086,SC2046
