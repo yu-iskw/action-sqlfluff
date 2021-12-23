@@ -21,6 +21,5 @@ RUN apt-get update -y \
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
 # Set the entrypoint
-COPY entrypoint.sh "$WORKING_DIRECTORY"
-COPY to-rdjson.jq "$WORKING_DIRECTORY"
+COPY . "$WORKING_DIRECTORY"
 ENTRYPOINT ["/bin/bash", "-c", "/${WORKING_DIRECTORY}/entrypoint.sh"]
