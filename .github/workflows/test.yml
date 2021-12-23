@@ -21,11 +21,10 @@ jobs:
         id: list-sql
         with:
           github_token: ${{ secrets.github_token }}
-          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-check
-          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           templater: jinja
-          paths: 'models'
+          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
+          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
         shell: bash
         run: |
@@ -50,11 +49,10 @@ jobs:
         id: list-sql
         with:
           github_token: ${{ secrets.github_token }}
-          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-pr-check
-          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           templater: jinja
-          paths: 'models'
+          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
+          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
         shell: bash
         run: |
@@ -80,11 +78,10 @@ jobs:
         continue-on-error: true
         with:
           github_token: ${{ secrets.github_token }}
-          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-pr-review
-          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           templater: jinja
-          paths: 'models'
+          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
+          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
         shell: bash
         run: |

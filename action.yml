@@ -6,10 +6,6 @@ inputs:
     description: 'GITHUB_TOKEN'
     required: true
     default: '${{ github.token }}'
-  working-directory:
-    description: 'Working directory relative to the root directory.'
-    required: false
-    default: '.'
   ### Flags for reviewdog ###
   level:
     description: 'Report level for reviewdog [info,warning,error]'
@@ -42,7 +38,7 @@ inputs:
     default: ''
   paths:
     description: |
-      PATH is the path to a sql file or directory to lint based on the working directory.
+      PATH is the path to a sql file or directory to lint.
       This can be either a file ('path/to/file.sql'), a path ('directory/of/sql/files'), a single ('-') character to indicate reading from *stdin* or a dot/blank ('.'/' ') which will be interpreted like passing the current working directory as a path argument.
     required: true
   encoding:
@@ -139,7 +135,6 @@ runs:
         REVIEWDOG_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
         REVIEWDOG_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
         REVIEWDOG_ESLINT_FLAGS: ${{ inputs.eslint_flags }}
-        REVIEWDOG_WORKDIR: ${{ inputs.working-directory }}
         REVIEWDOG_TOOL_NAME: ${{ inputs.tool_name }}
         SQLFLUFF_VERSION: ${{ inputs.sqlfluff_version }}
         SQLFLUFF_CONFIG: ${{ inputs.config }}
