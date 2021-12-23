@@ -37,7 +37,9 @@ inputs:
     default: 'v0.13.0'
   ### Flags for sqlfluff ###
   sqlfluff_version:
-    description: 'sqlfluff version. Use the latest version if not set.'
+    description: |
+      sqlfluff version. Use the latest version if not set.
+      It must be 0.8.2 or later.
     required: false
     default: '0.9.0'
   paths:
@@ -127,6 +129,7 @@ runs:
     # INPUT_<VARIABLE_NAME> is not available in Composite run steps
     # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
     INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+    INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
     REVIEWDOG_LEVEL: ${{ inputs.level }}
     REVIEWDOG_REPORTER: ${{ inputs.reporter }}
     REVIEWDOG_FILTER_MODE: ${{ inputs.filter_mode }}

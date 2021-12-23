@@ -19,32 +19,44 @@ The action automatically leaves comments about SQL violation using [reviewdog](h
 inputs:
   github_token:
     description: 'GITHUB_TOKEN'
+    required: true
     default: '${{ github.token }}'
+  working-directory:
+    description: 'working directory'
+    required: false
+    default: '${{ github.workspace }}'
   ### Flags for reviewdog ###
   level:
     description: 'Report level for reviewdog [info,warning,error]'
+    required: false
     default: 'error'
   reporter:
     description: 'Reporter of reviewdog command [github-check,github-pr-review].'
+    required: false
     default: 'github-check'
   filter_mode:
     description: |
       Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
       Default is file.
+    required: false
     default: 'file'
   fail_on_error:
     description: |
       Exit code for reviewdog when errors are found [true,false]
       Default is `false`.
+    required: false
     default: 'false'
-  reviewdog_flags:
-    description: 'Additional reviewdog flags'
-    default: ''
+  reviewdog_version:
+    description: 'reviewdog version'
+    required: false
+    default: 'v0.13.0'
   ### Flags for sqlfluff ###
   sqlfluff_version:
-    description: 'sqlfluff version. Use the latest version if not set.'
+    description: |
+      sqlfluff version. Use the latest version if not set.
+      It must be 0.8.2 or later.
     required: false
-    default: ''
+    default: '0.9.0'
   paths:
     description: |
       PATH is the path to a sql file or directory to lint.
