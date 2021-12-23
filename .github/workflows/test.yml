@@ -24,7 +24,7 @@ jobs:
           working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-check
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          templater: dbt
+          templater: jinja
           paths: 'models'
       - name: "Test outputs"
         shell: bash
@@ -53,7 +53,7 @@ jobs:
           working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-pr-check
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          templater: dbt
+          templater: jinja
           paths: 'models'
       - name: "Test outputs"
         shell: bash
@@ -83,7 +83,7 @@ jobs:
           working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-pr-review
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          templater: dbt
+          templater: jinja
           paths: 'models'
       - name: "Test outputs"
         shell: bash
