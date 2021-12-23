@@ -3,7 +3,8 @@ FROM python:3.9-slim
 ENV REVIEWDOG_VERSION="v0.13.0"
 ENV SQLFLUFF_VERSION="0.9.0"
 
-WORKDIR "/workdir"
+ENV WORKING_DIRECTORY="/workdir"
+WORKDIR "$WORKING_DIRECTORY"
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
@@ -24,6 +25,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Set the entrypoint
-COPY entrypoint.sh .
-COPY to-rdjson.jq .
-ENTRYPOINT ["entrypoint.sh"]
+COPY entrypoint.sh "$WORKING_DIRECTORY"
+COPY to-rdjson.jq "$WORKING_DIRECTORY"
+ENTRYPOINT ["/${WORKING_DIRECTORY}/entrypoint.sh"]
