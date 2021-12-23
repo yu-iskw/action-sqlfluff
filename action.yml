@@ -37,7 +37,9 @@ inputs:
     default: 'v0.13.0'
   ### Flags for sqlfluff ###
   sqlfluff_version:
-    description: 'sqlfluff version. Use the latest version if not set.'
+    description: |
+      sqlfluff version. Use the latest version if not set.
+      It must be 0.8.2 or later.
     required: false
     default: '0.9.0'
   paths:
@@ -121,35 +123,29 @@ outputs:
     value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.reviewdog-return-code }}
 
 runs:
-  using: 'composite'
-  steps:
-    - uses: reviewdog/action-setup@v1
-      with:
-        reviewdog_version: ${{ inputs.reviewdog_version }}
-    - run: $GITHUB_ACTION_PATH/script.sh
-      id: sqlfluff-with-reviewdog-in-composite
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        # INPUT_<VARIABLE_NAME> is not available in Composite run steps
-        # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
-        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
-        REVIEWDOG_LEVEL: ${{ inputs.level }}
-        REVIEWDOG_REPORTER: ${{ inputs.reporter }}
-        REVIEWDOG_FILTER_MODE: ${{ inputs.filter_mode }}
-        REVIEWDOG_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
-        REVIEWDOG_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
-        REVIEWDOG_ESLINT_FLAGS: ${{ inputs.eslint_flags }}
-        REVIEWDOG_TOOL_NAME: ${{ inputs.tool_name }}
-        SQLFLUFF_VERSION: ${{ inputs.sqlfluff_version }}
-        SQLFLUFF_CONFIG: ${{ inputs.config }}
-        SQLFLUFF_PATHS: ${{ inputs.paths }}
-        SQLFLUFF_PROCESSES: ${{ inputs.processes }}
-        SQLFLUFF_EXCLUDE_RULES: ${{ inputs.exclude-rules }}
-        SQLFLUFF_RULES: ${{ inputs.rules }}
-        SQLFLUFF_TEMPLATER: ${{ inputs.templater }}
-        SQLFLUFF_DISABLE_NOQA: ${{ inputs.disable-noqa }}
-        SQLFLUFF_DIALECT: ${{ inputs.dialect }}
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    # INPUT_<VARIABLE_NAME> is not available in Composite run steps
+    # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
+    INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+    INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
+    REVIEWDOG_LEVEL: ${{ inputs.level }}
+    REVIEWDOG_REPORTER: ${{ inputs.reporter }}
+    REVIEWDOG_FILTER_MODE: ${{ inputs.filter_mode }}
+    REVIEWDOG_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+    REVIEWDOG_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
+    REVIEWDOG_ESLINT_FLAGS: ${{ inputs.eslint_flags }}
+    REVIEWDOG_TOOL_NAME: ${{ inputs.tool_name }}
+    SQLFLUFF_VERSION: ${{ inputs.sqlfluff_version }}
+    SQLFLUFF_CONFIG: ${{ inputs.config }}
+    SQLFLUFF_PATHS: ${{ inputs.paths }}
+    SQLFLUFF_PROCESSES: ${{ inputs.processes }}
+    SQLFLUFF_EXCLUDE_RULES: ${{ inputs.exclude-rules }}
+    SQLFLUFF_RULES: ${{ inputs.rules }}
+    SQLFLUFF_TEMPLATER: ${{ inputs.templater }}
+    SQLFLUFF_DISABLE_NOQA: ${{ inputs.disable-noqa }}
+    SQLFLUFF_DIALECT: ${{ inputs.dialect }}
 
 # Ref: https://haya14busa.github.io/github-action-brandings/
 branding:

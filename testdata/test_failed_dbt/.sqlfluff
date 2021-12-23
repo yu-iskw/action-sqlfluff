@@ -5,3 +5,8 @@ sql_file_exts = .sql
 
 [tool.sqlfluff.templater.jinja]
 apply_dbt_builtins = True
+
+[sqlfluff:templater:dbt]
+project_dir = .
+profiles_dir = ./profiles
+profile = default

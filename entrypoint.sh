@@ -1,18 +1,25 @@
 #!/bin/bash
-set -e
+set -Eeuo pipefail
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-pip install -r "${SCRIPT_DIR}/requirements.txt"
+if [[ "${SQLFLUFF_VERSION:?}" =~ 0\.8.* ]]; then
+  pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.sqlfluff-0.8.txt"
+else
+  pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
+fi
 sqlfluff --version
 echo '::endgroup::'
 
 echo '::group:: Running sqlfluff 🐶 ...'
 # Allow failures now, as reviewdog handles them
 set +Eeuo pipefail
+
+# Make sure the version of sqlfluff
+sqlfluff --version
 
 lint_results="sqlfluff-lint.json"
 # shellcheck disable=SC2086,SC2046
@@ -42,7 +49,7 @@ set +Eeuo pipefail
 
 lint_results_rdjson="sqlfluff-lint.rdjson"
 cat <"$lint_results" |
-  jq -r -f "${GITHUB_ACTION_PATH}/to-rdjson.jq" |
+  jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
   tee >"$lint_results_rdjson"
 
 cat <"$lint_results_rdjson" |

@@ -1,0 +1,5 @@
+sqlfluff==${SQLFLUFF_VERSION}
+sqlfluff-templater-dbt==${SQLFLUFF_VERSION}
+# sqlfluff==0.8 doesn't work with dbt-core>=1.0
+# Because of the error: ImportError: cannot import name 'PROFILES_DIR' from 'dbt.config.profile'
+dbt-core>=0.17.0,<=0.21.0

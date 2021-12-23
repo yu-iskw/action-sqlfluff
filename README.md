@@ -13,10 +13,9 @@
 This is a github action to lint SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
 The action automatically leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
 
-## Requirements
-We have to set up a python environment in our workflow, because `action-sqlfluff` is a composite action.
-In order not to interfere our python environment, it would be nicer to set up python separattely.
-I made sure the action works on python 3.8, 3.9 and 3.10.
+## NOTE
+If you use dbt v0, `sqlfluff_version` has to be `0.8.2` because `sqlfluff==0.8.2` doesn't support dbt v1.
+If you use dbt v1, `sqlfluff_version` can be `0.9.0` which is the latest version at the time of writing the document.
 
 ## Input
 
@@ -24,32 +23,44 @@ I made sure the action works on python 3.8, 3.9 and 3.10.
 inputs:
   github_token:
     description: 'GITHUB_TOKEN'
+    required: true
     default: '${{ github.token }}'
+  working-directory:
+    description: 'working directory'
+    required: false
+    default: '${{ github.workspace }}'
   ### Flags for reviewdog ###
   level:
     description: 'Report level for reviewdog [info,warning,error]'
+    required: false
     default: 'error'
   reporter:
     description: 'Reporter of reviewdog command [github-check,github-pr-review].'
+    required: false
     default: 'github-check'
   filter_mode:
     description: |
       Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
       Default is file.
+    required: false
     default: 'file'
   fail_on_error:
     description: |
       Exit code for reviewdog when errors are found [true,false]
       Default is `false`.
+    required: false
     default: 'false'
-  reviewdog_flags:
-    description: 'Additional reviewdog flags'
-    default: ''
+  reviewdog_version:
+    description: 'reviewdog version'
+    required: false
+    default: 'v0.13.0'
   ### Flags for sqlfluff ###
   sqlfluff_version:
-    description: 'sqlfluff version. Use the latest version if not set.'
+    description: |
+      sqlfluff version. Use the latest version if not set.
+      It must be 0.8.2 or later.
     required: false
-    default: ''
+    default: '0.9.0'
   paths:
     description: |
       PATH is the path to a sql file or directory to lint.
@@ -146,15 +157,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - uses: yu-iskw/action-sqlfluff@v1
+      - uses: yu-iskw/action-sqlfluff@v2
         id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          templater: jinja
+          sqlfluff_version: "0.9.0"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: '${{ github.workspace }}/models'
       - name: 'Show outputs (Optional)'

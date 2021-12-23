@@ -1,0 +1,14 @@
+# For more information on how to configure this file, please see:
+# https://docs.getdbt.com/docs/profile
+config:
+  partial_parse: False
+  send_anonymous_usage_stats: False
+
+default:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "test-project"
+      dataset: "dbt_default_dataset"
