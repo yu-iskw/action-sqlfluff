@@ -159,6 +159,7 @@ jobs:
           working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-check
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
+          templater: 'dbt'
           paths: 'models'
 ```
 

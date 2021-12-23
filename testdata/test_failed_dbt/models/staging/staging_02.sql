@@ -1,5 +1,7 @@
 {{
-    config(enabled=true)
+  config(
+    enabled=true
+  )
 }}
 
 SELECT
