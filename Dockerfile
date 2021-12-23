@@ -16,6 +16,7 @@ RUN apt-get update -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install reviewdog
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
 # Install sqlfluff
