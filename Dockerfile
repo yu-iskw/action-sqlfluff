@@ -27,4 +27,4 @@ RUN pip install -r requirements.txt
 # Set the entrypoint
 COPY entrypoint.sh "$WORKING_DIRECTORY"
 COPY to-rdjson.jq "$WORKING_DIRECTORY"
-ENTRYPOINT ["/${WORKING_DIRECTORY}/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "-c", "/${WORKING_DIRECTORY}/entrypoint.sh"]
