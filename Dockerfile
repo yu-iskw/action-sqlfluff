@@ -24,5 +24,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Set the entrypoint
-COPY entrypoint.sh "/workdir/entrypoint.sh"
-ENTRYPOINT ["/workdir/entrypoint.sh"]
+COPY entrypoint.sh .
+COPY to-rdjson.jq .
+ENTRYPOINT ["entrypoint.sh"]
