@@ -8,7 +8,7 @@ WORKDIR "$WORKING_DIRECTORY"
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
-# hadolint ignore=DL3006
+# hadolint ignore=DL3008
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
         wget \
