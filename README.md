@@ -155,8 +155,13 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           templater: jinja
-          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
+          config: "${{ github.workspace }}/.sqlfluff"
+          paths: '${{ github.workspace }}/models'
+      - name: 'Show outputs (Optional)'
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
 ```
 
 ## Development
