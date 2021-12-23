@@ -12,6 +12,7 @@ RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
         wget \
         git \
+        jq \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
