@@ -40,7 +40,7 @@ set +Eeuo pipefail
 
 lint_results_rdjson="sqlfluff-lint.rdjson"
 cat <"$lint_results" |
-  jq -r -f "${GITHUB_ACTION_PATH}/to-rdjson.jq" |
+  jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
   tee >"$lint_results_rdjson"
 
 cat <"$lint_results_rdjson" |
