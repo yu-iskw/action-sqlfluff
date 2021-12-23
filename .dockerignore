@@ -1,0 +1,7 @@
+.github/
+.git/
+
+logs/
+dbt_modules/
+
+.DS_Store

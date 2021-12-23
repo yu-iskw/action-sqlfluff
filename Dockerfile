@@ -17,10 +17,6 @@ RUN apt-get update -y \
 
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
-# TODO: Install a linter and/or change docker image as you need.
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
 # Set the entrypoint
 COPY entrypoint.sh "/workdir/entrypoint.sh"
 ENTRYPOINT ["/workdir/entrypoint.sh"]

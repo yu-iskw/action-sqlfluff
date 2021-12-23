@@ -13,11 +13,6 @@
 This is a github action to lint SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
 The action automatically leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
 
-## Requirements
-We have to set up a python environment in our workflow, because `action-sqlfluff` is a composite action.
-In order not to interfere our python environment, it would be nicer to set up python separattely.
-I made sure the action works on python 3.8, 3.9 and 3.10.
-
 ## Input
 
 ```yaml
@@ -146,10 +141,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - uses: yu-iskw/action-sqlfluff@v1
+      - uses: yu-iskw/action-sqlfluff@v2
         id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
