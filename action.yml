@@ -31,10 +31,10 @@ inputs:
       Default is `false`.
     required: false
     default: 'false'
-  reviewdog_flags:
-    description: 'Additional reviewdog flags'
+  reviewdog_version:
+    description: 'reviewdog version'
     required: false
-    default: ''
+    default: 'v0.13.0'
   ### Flags for sqlfluff ###
   sqlfluff_version:
     description: 'sqlfluff version. Use the latest version if not set.'
@@ -125,10 +125,7 @@ runs:
   steps:
     - uses: reviewdog/action-setup@v1
       with:
-        reviewdog_version: v0.13.0
-    - uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
+        reviewdog_version: ${{ inputs.reviewdog_version }}
     - run: $GITHUB_ACTION_PATH/script.sh
       id: sqlfluff-with-reviewdog-in-composite
       shell: bash
