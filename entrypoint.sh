@@ -6,7 +6,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-if [[ "$SQLFLUFF_VERSION" =~ v0\.8.* ]] ; then
+if [[ "$SQLFLUFF_VERSION" =~ v0\.8.* ]]; then
   pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.sqlfluff-0.8.txt"
 else
   pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"

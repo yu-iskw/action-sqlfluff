@@ -158,7 +158,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          templater: jinja
+          sqlfluff_version: "0.9.0"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: '${{ github.workspace }}/models'
       - name: 'Show outputs (Optional)'
