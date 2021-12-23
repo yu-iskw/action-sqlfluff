@@ -20,10 +20,6 @@ RUN apt-get update -y \
 # Install reviewdog
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
-# Install sqlfluff
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
 # Set the entrypoint
 COPY entrypoint.sh "$WORKING_DIRECTORY"
 COPY to-rdjson.jq "$WORKING_DIRECTORY"
