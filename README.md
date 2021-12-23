@@ -13,6 +13,10 @@
 This is a github action to lint SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
 The action automatically leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
 
+## NOTE
+If you use dbt v0, `sqlfluff_version` has to be `0.8.2` because `sqlfluff==0.8.2` doesn't support dbt v1.
+If you use dbt v1, `sqlfluff_version` can be `0.9.0` which is the latest version at the time of writing the document.
+
 ## Input
 
 ```yaml
