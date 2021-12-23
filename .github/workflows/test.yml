@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - uses: ./
-        id: list-sql
+        id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-check
@@ -46,7 +46,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - uses: ./
-        id: list-sql
+        id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check
@@ -74,7 +74,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - uses: ./
-        id: list-sql
+        id: lint-sql
         continue-on-error: true
         with:
           github_token: ${{ secrets.github_token }}
