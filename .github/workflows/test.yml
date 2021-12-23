@@ -18,13 +18,13 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - uses: ./
-        id: list-sql
+        id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
-          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-check
+          templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          paths: 'models'
+          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
         shell: bash
         run: |
@@ -46,13 +46,13 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - uses: ./
-        id: list-sql
+        id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
-          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-pr-check
+          templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          paths: 'models'
+          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
         shell: bash
         run: |
@@ -74,14 +74,14 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - uses: ./
-        id: list-sql
+        id: lint-sql
         continue-on-error: true
         with:
           github_token: ${{ secrets.github_token }}
-          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           reporter: github-pr-review
+          templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          paths: 'models'
+          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
         shell: bash
         run: |

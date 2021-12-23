@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-if [ -n "${GITHUB_WORKSPACE}" ]; then
-  cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit
-fi
-
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'

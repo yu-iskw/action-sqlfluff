@@ -25,9 +25,6 @@ inputs:
   github_token:
     description: 'GITHUB_TOKEN'
     default: '${{ github.token }}'
-  working-directory:
-    description: 'Working directory relative to the root directory.'
-    default: '.'
   ### Flags for reviewdog ###
   level:
     description: 'Report level for reviewdog [info,warning,error]'
@@ -55,7 +52,7 @@ inputs:
     default: ''
   paths:
     description: |
-      PATH is the path to a sql file or directory to lint based on the working directory.
+      PATH is the path to a sql file or directory to lint.
       This can be either a file ('path/to/file.sql'), a path ('directory/of/sql/files'), a single ('-') character to indicate reading from *stdin* or a dot/blank ('.'/' ') which will be interpreted like passing the current working directory as a path argument.
     required: true
   encoding:
@@ -156,10 +153,15 @@ jobs:
         id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
-          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
-          reporter: github-check
-          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          paths: 'models'
+          reporter: github-pr-review
+          templater: jinja
+          config: "${{ github.workspace }}/.sqlfluff"
+          paths: '${{ github.workspace }}/models'
+      - name: 'Show outputs (Optional)'
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
 ```
 
 ## Development
