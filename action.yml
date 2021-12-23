@@ -6,6 +6,10 @@ inputs:
     description: 'GITHUB_TOKEN'
     required: true
     default: '${{ github.token }}'
+  working-directory:
+    description: 'working directory'
+    required: false
+    default: '${{ github.workspace }}'
   ### Flags for reviewdog ###
   level:
     description: 'Report level for reviewdog [info,warning,error]'
@@ -35,7 +39,7 @@ inputs:
   sqlfluff_version:
     description: 'sqlfluff version. Use the latest version if not set.'
     required: false
-    default: ''
+    default: '0.9.0'
   paths:
     description: |
       PATH is the path to a sql file or directory to lint.
@@ -125,6 +129,7 @@ runs:
     - run: $GITHUB_ACTION_PATH/script.sh
       id: sqlfluff-with-reviewdog-in-composite
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         # INPUT_<VARIABLE_NAME> is not available in Composite run steps
         # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611

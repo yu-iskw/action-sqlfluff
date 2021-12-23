@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         python: ["3.8", "3.9", "3.10"]
+        sqlfluff: ["0.9.0"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -19,10 +20,12 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-check
+          sqlfluff_version: ${{ matrix.sqlfluff }}
           templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
+        if: always()
         shell: bash
         run: |
           echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
@@ -37,6 +40,7 @@ jobs:
     strategy:
       matrix:
         python: ["3.8", "3.9", "3.10"]
+        sqlfluff: ["0.9.0"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -47,10 +51,12 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check
+          sqlfluff_version: ${{ matrix.sqlfluff }}
           templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
+        if: always()
         shell: bash
         run: |
           echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
@@ -65,6 +71,7 @@ jobs:
     strategy:
       matrix:
         python: ["3.8", "3.9", "3.10"]
+        sqlfluff: ["0.9.0"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -72,14 +79,15 @@ jobs:
           python-version: ${{ matrix.python }}
       - uses: ./
         id: lint-sql
-        continue-on-error: true
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
+          sqlfluff_version: ${{ matrix.sqlfluff }}
           templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
       - name: "Test outputs"
+        if: always()
         shell: bash
         run: |
           echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'

@@ -1,6 +1,7 @@
-[tool.sqlfluff.core]
-templater = "jinja"
-sql_file_exts = ".sql"
+[sqlfluff]
+templater = dbt
+dialect = bigquery
+sql_file_exts = .sql
 
 [tool.sqlfluff.templater.jinja]
-apply_dbt_builtins = true
+apply_dbt_builtins = True

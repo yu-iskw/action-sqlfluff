@@ -1,14 +1,12 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-if [[ "x${SQLFLUFF_VERSION}" == "x" ]]; then
-  pip install -U sqlfluff
-else
-  pip install -U sqlfluff=="$SQLFLUFF_VERSION"
-fi
+pip install -r "${SCRIPT_DIR}/requirements.txt"
 sqlfluff --version
 echo '::endgroup::'
 
