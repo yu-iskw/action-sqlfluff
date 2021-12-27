@@ -8,14 +8,26 @@
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/yu-iskw/action-sqlfluff?logo=github&sort=semver)](https://github.com/yu-iskw/action-sqlfluff/releases)
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
-![github-pr-review demo](./docs/images/github-pr-review-demo.png)
 
-This is a github action to lint SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
-The action automatically leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
+This is a github action to lint and fix SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
+The action has the two modes corresponding to `sqlfluff lint` and `sqlfluff fix`.
+One is to automatically leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
+The other is to automatically suggests code formatting on github pull request with reviewdog too.
+
+## Lint mode
+The lint mode leaves comments on github pull requests.
+Comments are pointed out by sqlfluff.
+![github-pr-review demo (lint)](./docs/images/github-pr-review-demo-lint.png)
+
+## Fix mode
+The fix mode suggests code formatting based on `sqlfluff fix`.
+![github-pr-review demo (fix)](./docs/images/github-pr-review-demo-fix.png)
 
 ## NOTE
-If you use dbt v0, `sqlfluff_version` has to be `0.8.2` because `sqlfluff==0.8.2` doesn't support dbt v1.
-If you use dbt v1, `sqlfluff_version` can be `0.9.0` which is the latest version at the time of writing the document.
+The `sqlfluff_version` input must be `0.9.0` or later, because `sqlfluff fix` at `0.8.2` or earlier doesn't support the `--config` option.
+
+The tested sqlfluff versions in the repositories are:
+- 0.9.0
 
 ## Input
 
@@ -58,9 +70,13 @@ inputs:
   sqlfluff_version:
     description: |
       sqlfluff version. Use the latest version if not set.
-      It must be 0.8.2 or later.
+      It must be 0.9.0 or later, because `sqlfluff<=0.8.2` doesn't support the `--config` option in the `fix` sub command.
     required: false
     default: '0.9.0'
+  sqlfluff_command:
+    description: 'The sub command of sqlfluff. One of lint and fix'
+    required: false
+    default: 'lint'
   paths:
     description: |
       PATH is the path to a sql file or directory to lint.
@@ -129,6 +145,7 @@ inputs:
 ```
 
 ## Outputs
+The outputs are available only when the `sqlfluff_command` input is `lint`.
 ```yaml
 outputs:
   sqlfluff-results:
@@ -163,6 +180,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           sqlfluff_version: "0.9.0"
+          sqlfluff_command: "lint" # Or fix
           config: "${{ github.workspace }}/.sqlfluff"
           paths: '${{ github.workspace }}/models'
       - name: 'Show outputs (Optional)'
