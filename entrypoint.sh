@@ -82,7 +82,6 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
     "${SQLFLUFF_PATHS:?}"
-  sqlfluff_exit_code=$?
   set -Eeuo pipefail
   echo '::endgroup::'
 
@@ -111,7 +110,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  exit $sqlfluff_exit_code
+  exit $exit_code
 # END OF fix
 else
   echo 'ERROR: SQLFLUFF_COMMAND must be one of lint and fix'
