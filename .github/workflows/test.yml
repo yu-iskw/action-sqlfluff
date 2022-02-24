@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         sqlfluff: ["0.9.4", "0.10.1"]
     steps:
@@ -41,7 +40,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         sqlfluff: ["0.9.4", "0.10.1"]
     steps:
