@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         sqlfluff: ["0.9.4", "0.10.1"]
     steps:
@@ -40,6 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         sqlfluff: ["0.9.4", "0.10.1"]
     steps:
@@ -48,7 +50,7 @@ jobs:
         id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
+          reporter: github-check
           sqlfluff_version: ${{ matrix.sqlfluff }}
           sqlfluff_command: fix
           templater: jinja
