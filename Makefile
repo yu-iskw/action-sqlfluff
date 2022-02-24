@@ -1,2 +1,2 @@
 setup-dev:
-	SQLFLUFF_VERSION=v0.9.0 pip install -r requirements/requirements.txt
+	SQLFLUFF_VERSION=v0.10.1 pip install -r requirements/requirements.txt
