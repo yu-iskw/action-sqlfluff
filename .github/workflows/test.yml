@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sqlfluff: ["0.9.4", "0.10.1"]
+        sqlfluff: ["0.9.4", "0.10.1", "0.11.1"]
     steps:
       - uses: actions/checkout@v2
       - uses: ./
@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sqlfluff: ["0.9.4", "0.10.1"]
+        sqlfluff: ["0.9.4", "0.10.1", "0.11.1"]
     steps:
       - uses: actions/checkout@v2
       - uses: ./
