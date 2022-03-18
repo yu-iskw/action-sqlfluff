@@ -3,12 +3,13 @@ on:
   pull_request:
 
 jobs:
-  test-check:
+  test-lint:
     name: runner / sqlfluff (github-check)
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        sqlfluff: ["0.8.2", "0.9.0", "0.9.1"]
+        sqlfluff: ["0.9.4", "0.10.1"]
     steps:
       - uses: actions/checkout@v2
       - uses: ./
@@ -17,71 +18,39 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-check
           sqlfluff_version: ${{ matrix.sqlfluff }}
+          sqlfluff_command: lint
           templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
-      - name: "Test outputs"
-        if: always()
-        shell: bash
-        run: |
-          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
-          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
-          echo '${{ steps.lint-sql.outputs.sqlfluff-exit-code }}'
-          echo '${{ steps.lint-sql.outputs.reviewdog-exit-code }}'
-
-  test-pr-check:
-    if: github.event_name == 'pull_request'
-    name: runner / sqlfluff (github-pr-check)
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        sqlfluff: ["0.8.2", "0.9.0", "0.9.1"]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
-        id: lint-sql
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-check
-          sqlfluff_version: ${{ matrix.sqlfluff }}
-          templater: jinja
-          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
-      - name: "Test outputs"
-        if: always()
-        shell: bash
-        run: |
-          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
-          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
-          echo '${{ steps.lint-sql.outputs.sqlfluff-exit-code }}'
-          echo '${{ steps.lint-sql.outputs.reviewdog-exit-code }}'
-
-  test-pr-review:
-    if: github.event_name == 'pull_request'
-    name: runner / sqlfluff (github-pr-review)
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        sqlfluff: ["0.8.2", "0.9.0", "0.9.1"]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
-        id: lint-sql
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
-          sqlfluff_version: ${{ matrix.sqlfluff }}
-          templater: jinja
-          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
-          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
-      - name: "Test outputs"
-        if: always()
-        shell: bash
-        run: |
-          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
-          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
-          echo '${{ steps.lint-sql.outputs.sqlfluff-exit-code }}'
-          echo '${{ steps.lint-sql.outputs.reviewdog-exit-code }}'
       - name: check the exit code
         if: ${{ !success() }}
         run: echo 'The previous step should fail' && exit 1
+      - name: "Test outputs"
+        if: always()
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-exit-code }}'
+          echo '${{ steps.lint-sql.outputs.reviewdog-exit-code }}'
+
+  test-fix:
+    needs: ["test-lint"]
+    name: runner / sqlfluff (test-fix)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sqlfluff: ["0.9.4", "0.10.1"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        id: lint-sql
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-check
+          sqlfluff_version: ${{ matrix.sqlfluff }}
+          sqlfluff_command: fix
+          templater: jinja
+          config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
+          paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'

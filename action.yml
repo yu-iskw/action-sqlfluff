@@ -39,9 +39,13 @@ inputs:
   sqlfluff_version:
     description: |
       sqlfluff version. Use the latest version if not set.
-      It must be 0.8.2 or later.
+      It must be 0.9.0 or later, because `sqlfluff<=0.8.2` doesn't support the `--config` option in the `fix` sub command.
     required: false
-    default: '0.9.1'
+    default: '0.10.1'
+  sqlfluff_command:
+    description: 'The sub command of sqlfluff. One of lint and fix'
+    required: false
+    default: 'lint'
   paths:
     description: |
       PATH is the path to a sql file or directory to lint.
@@ -138,6 +142,7 @@ runs:
     REVIEWDOG_ESLINT_FLAGS: ${{ inputs.eslint_flags }}
     REVIEWDOG_TOOL_NAME: ${{ inputs.tool_name }}
     SQLFLUFF_VERSION: ${{ inputs.sqlfluff_version }}
+    SQLFLUFF_COMMAND: ${{ inputs.sqlfluff_command }}
     SQLFLUFF_CONFIG: ${{ inputs.config }}
     SQLFLUFF_PATHS: ${{ inputs.paths }}
     SQLFLUFF_PROCESSES: ${{ inputs.processes }}
