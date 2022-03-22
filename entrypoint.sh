@@ -19,7 +19,7 @@ changed_files=$(git diff --name-only --no-color "$SOURCE_REFERENCE" "HEAD" -- "$
 echo "Changed files:"
 echo "$changed_files"
 # Halt the job
-if [[ "x${changed_files}" == "x" ]] ; then
+if [[ "${changed_files}" == "" ]] ; then
   echo "::set-output name=sqlfluff-exit-code::0"
   echo "::set-output name=reviewdog-return-code::0"
   exit 0
