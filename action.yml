@@ -151,7 +151,7 @@ runs:
     SQLFLUFF_TEMPLATER: ${{ inputs.templater }}
     SQLFLUFF_DISABLE_NOQA: ${{ inputs.disable-noqa }}
     SQLFLUFF_DIALECT: ${{ inputs.dialect }}
-    GITHUB_PULL_REQUEST_BASE_REF: ${{ github.event.pull_request.base.ref }}
+    GITHUB_PULL_REQUEST_BASE_REF: ${{ github.event.pull_request.base_ref }}
 
 # Ref: https://haya14busa.github.io/github-action-brandings/
 branding:
