@@ -38,7 +38,7 @@ inputs:
   reviewdog_version:
     description: 'reviewdog version'
     required: false
-    default: 'v0.13.0'
+    default: 'v0.14.0'
   ### Flags for sqlfluff ###
   sqlfluff_version:
     description: |
