@@ -22,9 +22,9 @@ git fetch --prune --unshallow --no-tags
 
 SQL_FILE_PATTERN='\.sql$'
 SOURCE_REF="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
-changed_files=$(git diff --name-only --no-color "$SOURCE_REF" "HEAD" -- "${SQLFLUFF_PATHS:?}" \
-  | grep -e "${SQL_FILE_PATTERN:?}" \
-  | xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :)
+changed_files=$(git diff --name-only --no-color "$SOURCE_REF" "HEAD" -- "${SQLFLUFF_PATHS:?}" |
+  grep -e "${SQL_FILE_PATTERN:?}" |
+  xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :)
 echo "$changed_files"
 echo '::endgroup::'
 
