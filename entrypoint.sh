@@ -17,6 +17,9 @@ echo '::endgroup::'
 
 # Get changed files
 echo '::group::🐶 Get changed files'
+# The command is necessary to get changed files.
+git fetch --prune --unshallow
+
 SQL_FILE_PATTERN='\.sql$'
 changed_files=($(git diff --name-only --no-color ${GITHUB_PULL_REQUEST_BASE_REF:?} HEAD -- \
   | grep -e "${SQL_FILE_PATTERN:?}" \
