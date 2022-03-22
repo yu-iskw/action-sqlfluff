@@ -22,15 +22,10 @@ git fetch --prune --unshallow --no-tags
 
 SQL_FILE_PATTERN='\.sql$'
 SOURCE_REF="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
-TARGET_REF="HEAD"
-changed_files=($(git diff --name-only --no-color "$SOURCE_REF" "HEAD" -- \
+changed_files=$(git diff --name-only --no-color "$SOURCE_REF" "HEAD" -- "${SQLFLUFF_PATHS:?}" \
   | grep -e "${SQL_FILE_PATTERN:?}" \
-  | xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :))
+  | xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :)
 echo "$changed_files"
-for changed_file in "${changed_files[@]}"
-do
-  echo "$changed_file"
-done
 echo '::endgroup::'
 
 if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
@@ -49,7 +44,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
     $(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
-    "${SQLFLUFF_PATHS:?}" |
+    $changed_files |
     tee "$lint_results"
   sqlfluff_exit_code=$?
 
