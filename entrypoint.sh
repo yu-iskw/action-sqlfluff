@@ -18,7 +18,7 @@ echo '::endgroup::'
 # Get changed files
 echo '::group::🐶 Get changed files'
 SQL_FILE_PATTERN='\.sql$'
-changed_files=($(git diff --name-only --no-color origin/${GITHUB_PULL_REQUEST_BASE_REF:?} -- \
+changed_files=($(git diff --name-only --no-color ${GITHUB_PULL_REQUEST_BASE_REF:?} HEAD -- \
   | grep -e "${SQL_FILE_PATTERN:?}" \
   | xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :))
 echo "$changed_files"
