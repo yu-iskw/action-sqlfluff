@@ -22,13 +22,14 @@ echo '::group::🐶 Get changed files'
 git fetch --prune --unshallow --no-tags
 
 SQL_FILE_PATTERN='\.sql$'
-TARGET_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
-changed_files=$(git diff --name-only --no-color "$TARGET_REFERENCE" "HEAD" -- "${SQLFLUFF_PATHS:?}" \
+SOURCE_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
+changed_files=$(git diff --name-only --no-color "$SOURCE_REFERENCE" "HEAD" -- "${SQLFLUFF_PATHS:?}" \
   | grep -e "${SQL_FILE_PATTERN:?}" \
   | xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :)
 echo "$changed_files"
 echo '::endgroup::'
 
+# Lint changed files if the mode is lint
 if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo '::group:: Running sqlfluff 🐶 ...'
   # Allow failures now, as reviewdog handles them
@@ -81,6 +82,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
 
   exit $sqlfluff_exit_code
 # END OF lint
+
+# Format changed files if the mode is fix
 elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   echo '::group:: Running sqlfluff 🐶 ...'
   # Allow failures now, as reviewdog handles them
@@ -95,7 +98,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     $(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
-    "${SQLFLUFF_PATHS:?}"
+    $changed_files |
   set -Eeuo pipefail
   echo '::endgroup::'
 
