@@ -5,16 +5,6 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
-echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-if [[ "${SQLFLUFF_VERSION:?}" =~ 0\.8.* ]]; then
-  pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.sqlfluff-0.8.txt"
-else
-  pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
-fi
-# Make sure the version of sqlfluff
-sqlfluff --version
-echo '::endgroup::'
-
 # Get changed files
 echo '::group::🐶 Get changed files'
 # The command is necessary to get changed files.
@@ -26,7 +16,25 @@ SOURCE_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
 changed_files=$(git diff --name-only --no-color "$SOURCE_REFERENCE" "HEAD" -- "${SQLFLUFF_PATHS:?}" |
   grep -e "${SQL_FILE_PATTERN:?}" |
   xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :)
+echo "Changed files:"
 echo "$changed_files"
+# Halt the job
+if [[ "x${changed_files}" == "x" ]] ; then
+  echo "::set-output name=sqlfluff-exit-code::0"
+  echo "::set-output name=reviewdog-return-code::0"
+  exit 0
+fi
+echo '::endgroup::'
+
+# Install sqlfluff
+echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
+if [[ "${SQLFLUFF_VERSION:?}" =~ 0\.8.* ]]; then
+  pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.sqlfluff-0.8.txt"
+else
+  pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
+fi
+# Make sure the version of sqlfluff
+sqlfluff --version
 echo '::endgroup::'
 
 # Lint changed files if the mode is lint
