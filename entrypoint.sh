@@ -21,7 +21,7 @@ echo '::group::🐶 Get changed files'
 # TODO Fetch only the target branch
 git fetch --prune --unshallow --no-tags
 
-SQL_FILE_PATTERN='\.sql$'
+SQL_FILE_PATTERN="${FILE_PATTERN:?}"
 SOURCE_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
 changed_files=$(git diff --name-only --no-color "$SOURCE_REFERENCE" "HEAD" -- "${SQLFLUFF_PATHS:?}" |
   grep -e "${SQL_FILE_PATTERN:?}" |
