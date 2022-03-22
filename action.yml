@@ -7,9 +7,9 @@ inputs:
     required: true
     default: '${{ github.token }}'
   github_base_ref:
-    description: "Pull request target branch (default: origin/github.base_ref)"
+    description: "Pull request target branch name"
     required: false
-    default: "origin/${{ github.base_ref }}"
+    default: "${{ github.base_ref }}"
   working-directory:
     description: 'working directory'
     required: false

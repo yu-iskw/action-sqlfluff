@@ -18,10 +18,12 @@ echo '::endgroup::'
 # Get changed files
 echo '::group::🐶 Get changed files'
 # The command is necessary to get changed files.
-git fetch --prune --unshallow
+git fetch --prune --unshallow --no-tags
 
 SQL_FILE_PATTERN='\.sql$'
-changed_files=($(git diff --name-only --no-color ${GITHUB_PULL_REQUEST_BASE_REF:?} HEAD -- \
+SOURCE_REF="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
+TARGET_REF="HEAD"
+changed_files=($(git diff --name-only --no-color "$SOURCE_REF" "HEAD" -- \
   | grep -e "${SQL_FILE_PATTERN:?}" \
   | xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :))
 echo "$changed_files"
