@@ -6,6 +6,10 @@ inputs:
     description: 'GITHUB_TOKEN'
     required: true
     default: '${{ github.token }}'
+  github_base_ref:
+    description: "Pull request target branch name"
+    required: false
+    default: "${{ github.base_ref }}"
   working-directory:
     description: 'working directory'
     required: false
@@ -34,7 +38,7 @@ inputs:
   reviewdog_version:
     description: 'reviewdog version'
     required: false
-    default: 'v0.13.0'
+    default: 'v0.14.0'
   ### Flags for sqlfluff ###
   sqlfluff_version:
     description: |
@@ -51,6 +55,10 @@ inputs:
       PATH is the path to a sql file or directory to lint.
       This can be either a file ('path/to/file.sql'), a path ('directory/of/sql/files'), a single ('-') character to indicate reading from *stdin* or a dot/blank ('.'/' ') which will be interpreted like passing the current working directory as a path argument.
     required: true
+  file_pattern:
+    description: "The regular expression to filter checked files"
+    required: false
+    default: '\.sql$'
   encoding:
     description: 'Specifiy encoding to use when reading and writing files. Defaults to autodetect.'
     required: false
@@ -151,6 +159,8 @@ runs:
     SQLFLUFF_TEMPLATER: ${{ inputs.templater }}
     SQLFLUFF_DISABLE_NOQA: ${{ inputs.disable-noqa }}
     SQLFLUFF_DIALECT: ${{ inputs.dialect }}
+    GITHUB_PULL_REQUEST_BASE_REF: ${{ inputs.github_base_ref }}
+    FILE_PATTERN: ${{ inputs.file_pattern }}
 
 # Ref: https://haya14busa.github.io/github-action-brandings/
 branding:
