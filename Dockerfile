@@ -13,6 +13,7 @@ RUN apt-get update -y \
         wget \
         git \
         jq \
+        build-essential \
         libsasl2-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
