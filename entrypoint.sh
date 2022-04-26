@@ -20,6 +20,7 @@ echo "Changed files:"
 echo "$changed_files"
 # Halt the job
 if [[ "${changed_files}" == "" ]]; then
+  echo "There is no changed files. The action doesn't scan files."
   echo "::set-output name=sqlfluff-exit-code::0"
   echo "::set-output name=reviewdog-return-code::0"
   exit 0
