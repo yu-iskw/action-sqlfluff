@@ -20,6 +20,7 @@ echo "Changed files:"
 echo "$changed_files"
 # Halt the job
 if [[ "${changed_files}" == "" ]]; then
+  echo "There is no changed files. The action doesn't scan files."
   echo "::set-output name=sqlfluff-exit-code::0"
   echo "::set-output name=reviewdog-return-code::0"
   exit 0
@@ -35,6 +36,15 @@ else
 fi
 # Make sure the version of sqlfluff
 sqlfluff --version
+echo '::endgroup::'
+
+# Install extra python modules
+echo '::group:: Installing extra python modules'
+if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
+  pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
+  # Make sure the installed modules
+  pip list
+fi
 echo '::endgroup::'
 
 # Lint changed files if the mode is lint

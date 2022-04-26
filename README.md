@@ -143,6 +143,18 @@ inputs:
     description: 'The number of parallel processes to run.'
     required: false
     default: "2"
+  # Mainly used to install dbt adapters
+  # NOTE:
+  # sqlfluff tries to dynamically import a dbt adapter based on a configuration.
+  # There is no great way to dynamically install required dbt adapters to fit to users of action.
+  # It might be possible to support only dbt adapters craeted by dbt labo.
+  # But, as that doesn't support 3rd party dbt adapters, we have no choise but for users to pass their custom extra requirements.txt.
+  extra_requirements_txt:
+    description: |
+      A path to your custom `requirements.txt` to install extra modules for your dbt adapters.
+      Please make sure not to contain `sqlfluff` and its dependent packages, because the action can be broken by the conflicts.
+    required: false
+    default: ''
 ```
 
 ## Outputs
