@@ -37,6 +37,15 @@ fi
 sqlfluff --version
 echo '::endgroup::'
 
+# Install extra python modules
+echo '::group:: Installing extra python modules'
+if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
+  pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
+  # Make sure the installed modules
+  pip list
+fi
+echo '::endgroup::'
+
 # Lint changed files if the mode is lint
 if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo '::group:: Running sqlfluff 🐶 ...'

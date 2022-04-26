@@ -22,6 +22,7 @@ jobs:
           templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
+          extra_requirements_txt: "${{ github.workspace }}/testdata/test_failed_dbt/extra_requirements.txt"
       - name: check the exit code
         if: ${{ !success() }}
         run: echo 'The previous step should fail' && exit 1
@@ -54,3 +55,4 @@ jobs:
           templater: jinja
           config: "${{ github.workspace }}/testdata/test_failed_dbt/.sqlfluff"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
+          extra_requirements_txt: "${{ github.workspace }}/testdata/test_failed_dbt/extra_requirements.txt"
