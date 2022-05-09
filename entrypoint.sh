@@ -51,7 +51,7 @@ echo '::endgroup::'
 # Install dbt packages
 echo '::group:: Installing dbt packages'
 if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]]; then
-  dbt dpes --profiles-dir "${SCRIPT_DIR}/resources/dummy_profiles"
+  dbt deps --profiles-dir "${SCRIPT_DIR}/resources/dummy_profiles"
 fi
 echo '::endgroup::'
 
