@@ -24,11 +24,9 @@ The fix mode suggests code formatting based on `sqlfluff fix`.
 ![github-pr-review demo (fix)](./docs/images/github-pr-review-demo-fix.png)
 
 ## NOTE
-The `sqlfluff_version` input must be `0.9.0` or later, because `sqlfluff fix` at `0.8.2` or earlier doesn't support the `--config` option.
-
 The tested sqlfluff versions in the repositories are:
-- 0.9.4
-- 0.10.1
+- 0.12.0
+- 0.13.1
 
 ## Input
 
