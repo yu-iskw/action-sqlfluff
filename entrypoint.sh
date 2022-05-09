@@ -6,7 +6,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 # Change the working directory
-if [[ "x${INPUT_WORKING_DIRECTORY}" != "x" ]] ; then
+if [[ "x${INPUT_WORKING_DIRECTORY}" != "x" ]]; then
   cd "$INPUT_WORKING_DIRECTORY"
 fi
 
