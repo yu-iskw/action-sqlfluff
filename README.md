@@ -23,12 +23,39 @@ Comments are pointed out by sqlfluff.
 The fix mode suggests code formatting based on `sqlfluff fix`.
 ![github-pr-review demo (fix)](./docs/images/github-pr-review-demo-fix.png)
 
-## NOTE
-The `sqlfluff_version` input must be `0.9.0` or later, because `sqlfluff fix` at `0.8.2` or earlier doesn't support the `--config` option.
+## Example
 
+```yaml
+name: sqlfluff with reviewdog
+on:
+  pull_request:
+jobs:
+  test-check:
+    name: runner / sqlfluff (github-check)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: yu-iskw/action-sqlfluff@v3
+        id: lint-sql
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          sqlfluff_version: "0.13.0"
+          sqlfluff_command: "fix" # Or "lint"
+          config: "${{ github.workspace }}/.sqlfluff"
+          paths: '${{ github.workspace }}/models'
+      - name: 'Show outputs (Optional)'
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
+```
+
+
+## NOTE
 The tested sqlfluff versions in the repositories are:
-- 0.9.4
-- 0.10.1
+- 0.12.0
+- 0.13.1
 
 ## Input
 
@@ -173,34 +200,6 @@ outputs:
   reviewdog-return-code:
     description: 'The exit code of reviewdog'
     value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.reviewdog-return-code }}
-```
-
-## Usage
-
-```yaml
-name: sqlfluff with reviewdog
-on:
-  pull_request:
-jobs:
-  test-check:
-    name: runner / sqlfluff (github-check)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: yu-iskw/action-sqlfluff@v3
-        id: lint-sql
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
-          sqlfluff_version: "0.13.0"
-          sqlfluff_command: "fix" # Or "lint"
-          config: "${{ github.workspace }}/.sqlfluff"
-          paths: '${{ github.workspace }}/models'
-      - name: 'Show outputs (Optional)'
-        shell: bash
-        run: |
-          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
-          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
 ```
 
 ## Development
