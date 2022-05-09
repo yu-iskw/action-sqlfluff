@@ -10,3 +10,4 @@ apply_dbt_builtins = True
 project_dir = .
 profiles_dir = ./profiles
 profile = default
+target = spark
