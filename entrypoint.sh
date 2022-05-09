@@ -5,6 +5,11 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
+# Change the working directory
+if [[ "x${INPUT_WORKING_DIRECTORY}" != "x" ]] ; then
+  cd "$INPUT_WORKING_DIRECTORY"
+fi
+
 # Get changed files
 echo '::group::🐶 Get changed files'
 # The command is necessary to get changed files.
@@ -29,11 +34,7 @@ echo '::endgroup::'
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-if [[ "${SQLFLUFF_VERSION:?}" =~ 0\.8.* ]]; then
-  pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.sqlfluff-0.8.txt"
-else
-  pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
-fi
+pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
 # Make sure the version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
@@ -44,6 +45,13 @@ if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
   pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
   # Make sure the installed modules
   pip list
+fi
+echo '::endgroup::'
+
+# Install dbt packages
+echo '::group:: Installing dbt packages'
+if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]] ; then
+  dbt dpes --profiles-dir "${SCRIPT_DIR}/resources/dummy_profiles"
 fi
 echo '::endgroup::'
 

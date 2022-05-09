@@ -1,6 +1,8 @@
 name: Test
 on:
   pull_request:
+    paths-ignore:
+      - "**/*.md"
 
 jobs:
   test-lint:
@@ -28,6 +30,7 @@ jobs:
           sqlfluff_version: ${{ matrix.sqlfluff }}
           sqlfluff_command: lint
           templater: jinja
+          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           config: "${{ github.workspace }}/testdata/test_failed_dbt/${{ matrix.config }}"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
           extra_requirements_txt: "${{ github.workspace }}/testdata/test_failed_dbt/extra_requirements.txt"
@@ -61,6 +64,7 @@ jobs:
           sqlfluff_version: ${{ matrix.sqlfluff }}
           sqlfluff_command: fix
           templater: jinja
+          working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           config: "${{ github.workspace }}/testdata/test_failed_dbt/${{ matrix.config }}"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
           extra_requirements_txt: "${{ github.workspace }}/testdata/test_failed_dbt/extra_requirements.txt"
