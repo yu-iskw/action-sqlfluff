@@ -2,4 +2,4 @@ dbt-postgres>=1.0.0,<2.0.0
 dbt-bigquery>=1.0.0,<2.0.0
 dbt-redshift>=1.0.0,<2.0.0
 dbt-snowflake>=1.0.0,<2.0.0
-dbt-spark>=1.0.0,<2.0.0
+dbt-spark[pyHive]>=1.0.0,<2.0.0
