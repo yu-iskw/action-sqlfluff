@@ -55,7 +55,7 @@ jobs:
 ## NOTE
 The tested sqlfluff versions in the repositories are:
 - 0.12.0
-- 0.13.1
+- 0.13.2
 
 ## Input
 

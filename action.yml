@@ -45,7 +45,7 @@ inputs:
       sqlfluff version. Use the latest version if not set.
       It must be 0.9.0 or later, because `sqlfluff<=0.8.2` doesn't support the `--config` option in the `fix` sub command.
     required: false
-    default: '0.13.0'
+    default: '0.13.2'
   sqlfluff_command:
     description: 'The sub command of sqlfluff. One of lint and fix'
     required: false
