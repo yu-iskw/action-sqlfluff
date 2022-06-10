@@ -153,8 +153,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  exit 0
-  # exit $exit_code
+  exit $exit_code
 # END OF fix
 else
   echo 'ERROR: SQLFLUFF_COMMAND must be one of lint and fix'
