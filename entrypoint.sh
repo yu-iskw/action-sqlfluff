@@ -29,7 +29,9 @@ echo '::endgroup::'
 
 # Change the working directory
 if [[ "x${INPUT_WORKING_DIRECTORY}" != "x" ]]; then
+  echo '::group:: Change the working directory'
   cd "$INPUT_WORKING_DIRECTORY"
+  echo '::endgroup::'
 fi
 
 # Install sqlfluff
