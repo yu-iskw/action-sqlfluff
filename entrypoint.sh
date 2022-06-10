@@ -144,8 +144,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     -reporter="${REVIEWDOG_REPORTER}" \
     -filter-mode="${REVIEWDOG_FILTER_MODE}" \
     -fail-on-error="${REVIEWDOG_FAIL_ON_ERROR}" \
-    -level="${REVIEWDOG_LEVEL}" <"${temp_file}" || true
-  exit_code="${PIPESTATUS[0]}"
+    -level="${REVIEWDOG_LEVEL}" <"${temp_file}" || exit_code=$?
 
   # Clean up
   git stash drop || true
