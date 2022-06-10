@@ -5,13 +5,6 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
-# Change the working directory
-if [[ "x${INPUT_WORKING_DIRECTORY}" != "x" ]]; then
-  echo '::group:: Change the working directory'
-  cd "$INPUT_WORKING_DIRECTORY"
-  echo '::endgroup::'
-fi
-
 # Get changed files
 echo '::group:: Get changed files in the working directory'
 # The command is necessary to get changed files.
@@ -20,7 +13,7 @@ git fetch --prune --unshallow --no-tags
 
 SQL_FILE_PATTERN="${FILE_PATTERN:?}"
 SOURCE_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
-changed_files=$(git diff --name-only --no-color "$SOURCE_REFERENCE" "HEAD" -- "${SQLFLUFF_PATHS:?}" . |
+changed_files=$(git diff --name-only --no-color "$SOURCE_REFERENCE" "HEAD" -- "${SQLFLUFF_PATHS:?}" |
   grep -e "${SQL_FILE_PATTERN:?}" |
   xargs -I% bash -c 'if [[ -f "%" ]] ; then echo "%"; fi' || :)
 echo "Changed files:"
