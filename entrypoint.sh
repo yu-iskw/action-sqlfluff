@@ -152,7 +152,9 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  exit $exit_code
+  exit 0
+  # NOTE: As far as I know, it is impossible to leave suggestions to return error exit code
+  # exit "$exit_code"
 # END OF fix
 else
   echo 'ERROR: SQLFLUFF_COMMAND must be one of lint and fix'
