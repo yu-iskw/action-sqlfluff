@@ -27,12 +27,19 @@ if [[ "${changed_files}" == "" ]]; then
 fi
 echo '::endgroup::'
 
+echo 'Before changing the directory'
+ls -R
+
 # Change the working directory
 if [[ "x${INPUT_WORKING_DIRECTORY}" != "x" ]]; then
   echo '::group:: Change the working directory'
   cd "$INPUT_WORKING_DIRECTORY"
   echo '::endgroup::'
 fi
+
+echo 'After changing the directory'
+ls -R
+
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
