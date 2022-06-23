@@ -27,11 +27,6 @@ if [[ "${changed_files}" == "" ]]; then
 fi
 echo '::endgroup::'
 
-# Change the working directory
-if [[ "x${INPUT_WORKING_DIRECTORY}" != "x" ]]; then
-  cd "$INPUT_WORKING_DIRECTORY"
-fi
-
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
 pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
@@ -51,7 +46,10 @@ echo '::endgroup::'
 # Install dbt packages
 echo '::group:: Installing dbt packages'
 if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]]; then
+  defulat_dir="$(pwd)"
+  cd "$INPUT_WORKING_DIRECTORY"
   dbt deps --profiles-dir "${SCRIPT_DIR}/resources/dummy_profiles"
+  cd "$defulat_dir"
 fi
 echo '::endgroup::'
 
