@@ -124,6 +124,8 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
     $changed_files
   sqlfluff_exit_code=$?   
+  echo sqlfluff_exit_code
+  echo $sqlfluff_exit_code
   echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"    
   set -Eeuo pipefail
   echo '::endgroup::'
