@@ -123,6 +123,9 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
     $changed_files
+  sqlfluff_exit_code=$?   
+  echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
+  
   set -Eeuo pipefail
   echo '::endgroup::'
 
@@ -151,7 +154,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  exit 0
+  exit $sqlfluff_exit_code
   # exit $exit_code
 # END OF fix
 else
