@@ -109,7 +109,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
 
 # Format changed files if the mode is fix
 elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
-  echo '::group:: Running sqlfluff 🐶 ...'
+  echo '::group:: Running sqlfluff 🐶 sqlfluff_exit_code...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
   # shellcheck disable=SC2086,SC2046
@@ -124,7 +124,9 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
     $changed_files
   sqlfluff_exit_code=$?   
+  echo 'sqlfluff_exit_code'
   echo sqlfluff_exit_code
+  echo '$sqlfluff_exit_code'
   echo $sqlfluff_exit_code
   echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"    
   set -Eeuo pipefail
