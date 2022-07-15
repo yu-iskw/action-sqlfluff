@@ -40,7 +40,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          sqlfluff_version: "0.13.0"
+          sqlfluff_version: "1.2.0"
           sqlfluff_command: "fix" # Or "lint"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: '${{ github.workspace }}/models'
@@ -54,8 +54,9 @@ jobs:
 
 ## NOTE
 The tested sqlfluff versions in the repositories are:
-- 0.12.0
-- 0.13.1
+- 1.0.0
+- 1.1.0
+- 1.2.0
 
 ## Input
 
@@ -98,9 +99,8 @@ inputs:
   sqlfluff_version:
     description: |
       sqlfluff version. Use the latest version if not set.
-      It must be 0.9.0 or later, because `sqlfluff<=0.8.2` doesn't support the `--config` option in the `fix` sub command.
     required: false
-    default: '0.9.4'
+    default: '1.2.0'
   sqlfluff_command:
     description: 'The sub command of sqlfluff. One of lint and fix'
     required: false
