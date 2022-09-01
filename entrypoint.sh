@@ -74,7 +74,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   sqlfluff_exit_code=$?
   cat "$lint_results"
 
-  echo "::set-output name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" # Convert to a single line
+  # echo "::set-output name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" # Convert to a single line
   echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
 
   set -Eeuo pipefail
@@ -98,7 +98,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
       -level="${REVIEWDOG_LEVEL}"
   reviewdog_return_code="${PIPESTATUS[1]}"
 
-  echo "::set-output name=sqlfluff-results-rdjson::$(cat <"$lint_results_rdjson" | jq -r -c '.')" # Convert to a single line
+  # echo "::set-output name=sqlfluff-results-rdjson::$(cat <"$lint_results_rdjson" | jq -r -c '.')" # Convert to a single line
   echo "::set-output name=reviewdog-return-code::${reviewdog_return_code}"
 
   set -Eeuo pipefail
