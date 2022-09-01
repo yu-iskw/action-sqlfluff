@@ -40,7 +40,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          sqlfluff_version: "1.2.0"
+          sqlfluff_version: "1.3.0"
           sqlfluff_command: "fix" # Or "lint"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: '${{ github.workspace }}/models'
@@ -57,6 +57,7 @@ The tested sqlfluff versions in the repositories are:
 - 1.0.0
 - 1.1.0
 - 1.2.0
+- 1.3.0
 
 ## Input
 
@@ -100,7 +101,7 @@ inputs:
     description: |
       sqlfluff version. Use the latest version if not set.
     required: false
-    default: '1.2.0'
+    default: '1.3.0'
   sqlfluff_command:
     description: 'The sub command of sqlfluff. One of lint and fix'
     required: false
