@@ -89,6 +89,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
     jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
     tee >"$lint_results_rdjson"
 
+  cat "$lint_results_rdjson"
+
   cat <"$lint_results_rdjson" |
     reviewdog -f=rdjson \
       -name="sqlfluff-lint" \
