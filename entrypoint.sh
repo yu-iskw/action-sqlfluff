@@ -88,8 +88,11 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   cat <"$lint_results" |
     jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
     tee >"$lint_results_rdjson"
-  echo "echoing lint_results_rdjson:"
+  echo "echo and cat lint_results_rdjson start"
+  echo "$lint_results_rdjson"
   cat "$lint_results_rdjson"
+  echo "echo and cat lint_results_rdjson end"
+  
 
   cat <"$lint_results_rdjson" |
     reviewdog -f=rdjson \
