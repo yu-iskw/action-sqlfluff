@@ -88,13 +88,13 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
 
   lint_results_rdjson="sqlfluff-lint.rdjson"
   cat "$lint_results" |
-    jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
+    jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" \
     >> "$lint_results_rdjson"
   echo "echo and cat lint_results_rdjson start"
   echo "$lint_results_rdjson"
   cat "$lint_results_rdjson"
-  cat <"$lint_results"
-  cat <"$lint_results" |
+  cat "$lint_results"
+  cat "$lint_results" |
     jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" 
   cat <"$lint_results" |
     jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
