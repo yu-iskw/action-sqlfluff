@@ -77,7 +77,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
 
   echo "echo and cat lint_results start"
   echo "echo lint_results = $lint_results"
-  cat "cat lint_results = $lint_results"
+  cat "$lint_results"
   echo "echo and cat lint_results end"
 
   echo "::set-output name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" # Convert to a single line
@@ -96,8 +96,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
     >> "$lint_results_rdjson"
   echo "echo and cat lint_results_rdjson start"
   echo "echo lint_results_rdjson = $lint_results_rdjson"
-  cat "cat lint_results_rdjson = $lint_results_rdjson"
-  cat "cat lint_results = $lint_results"
+  cat "$lint_results_rdjson"
+  cat "$lint_results"
   echo "echo and cat lint_results_rdjson end"
 
   cat <"$lint_results_rdjson" |
