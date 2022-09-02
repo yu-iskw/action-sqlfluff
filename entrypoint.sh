@@ -87,12 +87,19 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   set +Eeuo pipefail
 
   lint_results_rdjson="sqlfluff-lint.rdjson"
-  cat <"$lint_results" |
+  cat "$lint_results" |
     jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
-    tee >"$lint_results_rdjson"
+    >> "$lint_results_rdjson"
   echo "echo and cat lint_results_rdjson start"
   echo "$lint_results_rdjson"
   cat "$lint_results_rdjson"
+  cat <"$lint_results"
+  cat <"$lint_results" |
+    jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" 
+  cat <"$lint_results" |
+    jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
+    tee
+  python -m json.tool $lint_results_rdjson
   echo "echo and cat lint_results_rdjson end"
   
 
