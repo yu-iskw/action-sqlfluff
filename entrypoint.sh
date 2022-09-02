@@ -73,7 +73,6 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
     $changed_files >> "$lint_results"
   sqlfluff_exit_code=$?
   cat "$lint_results"
-  echo "$lint_results_rdjson"
 
   # echo "::set-output name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" # Convert to a single line
   echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
@@ -89,10 +88,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   cat <"$lint_results" |
     jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
     tee >"$lint_results_rdjson"
-
+  echo "echoing lint_results_rdjson:"
   cat "$lint_results_rdjson"
-  
-  echo "$lint_results_rdjson"
 
   cat <"$lint_results_rdjson" |
     reviewdog -f=rdjson \
