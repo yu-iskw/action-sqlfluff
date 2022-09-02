@@ -72,13 +72,15 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
       $changed_files |
     grep '^\[' \
     >> "$lint_results"
-  sqlfluff_exit_code=$?
+  sqlfluff_exit_code="${PIPESTATUS[0]}"
+  echo "sqlfluff_exit_code = $sqlfluff_exit_code"
+
   echo "echo and cat lint_results start"
-  echo "$lint_results"
-  cat "$lint_results"
+  echo "echo lint_results = $lint_results"
+  cat "cat lint_results = $lint_results"
   echo "echo and cat lint_results end"
 
-  # echo "::set-output name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" # Convert to a single line
+  echo "::set-output name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" # Convert to a single line
   echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
 
   set -Eeuo pipefail
@@ -93,17 +95,10 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
     jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" \
     >> "$lint_results_rdjson"
   echo "echo and cat lint_results_rdjson start"
-  echo "$lint_results_rdjson"
-  cat "$lint_results_rdjson"
-  cat "$lint_results"
-  cat "$lint_results" |
-    jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" 
-  cat <"$lint_results" |
-    jq -r -f "${SCRIPT_DIR}/to-rdjson.jq" |
-    tee
-  python -m json.tool $lint_results_rdjson
+  echo "echo lint_results_rdjson = $lint_results_rdjson"
+  cat "cat lint_results_rdjson = $lint_results_rdjson"
+  cat "cat lint_results = $lint_results"
   echo "echo and cat lint_results_rdjson end"
-  
 
   cat <"$lint_results_rdjson" |
     reviewdog -f=rdjson \
@@ -114,7 +109,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
       -level="${REVIEWDOG_LEVEL}"
   reviewdog_return_code="${PIPESTATUS[1]}"
 
-  # echo "::set-output name=sqlfluff-results-rdjson::$(cat <"$lint_results_rdjson" | jq -r -c '.')" # Convert to a single line
+  echo "::set-output name=sqlfluff-results-rdjson::$(cat <"$lint_results_rdjson" | jq -r -c '.')" # Convert to a single line
   echo "::set-output name=reviewdog-return-code::${reviewdog_return_code}"
 
   set -Eeuo pipefail
