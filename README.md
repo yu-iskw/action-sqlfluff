@@ -183,6 +183,12 @@ inputs:
       Please make sure not to contain `sqlfluff` and its dependent packages, because the action can be broken by the conflicts.
     required: false
     default: ''
+  ignore_errors:
+    description: |
+      Ignore particular families of errors so that they don’t cause a failed run. 
+      Multiple options are possible if comma separated: e.g. –ignore parsing,templating.
+    required: false
+    default: ''  
 ```
 
 ## Outputs
