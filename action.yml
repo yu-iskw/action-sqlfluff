@@ -1,6 +1,6 @@
-name: 'Run sqlfluff with reviewdog'
-description: '🐶 Run sqlfluff with reviewdog on pull requests to improve code review experience.'
-author: 'yu-iskw'
+name: 'Sqlfluff with reviewdog with ignore option'
+description: '🐶 Run sqlfluff with reviewdog on pull requests to improve code review experience. This action is forked from yu-iskw/action-sqlfluff'
+author: 'lachupacabra'
 inputs:
   github_token:
     description: 'GITHUB_TOKEN'
