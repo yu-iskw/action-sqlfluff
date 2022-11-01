@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.12-rc-slim-buster
 
 ENV REVIEWDOG_VERSION="v0.13.0"
 
