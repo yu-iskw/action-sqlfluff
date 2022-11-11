@@ -155,7 +155,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  exit $sqlfluff_exit_code
+  exit 0
   # exit $exit_code
 # END OF fix
 else
