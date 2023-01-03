@@ -1,6 +1,6 @@
 name: 'Run sqlfluff with reviewdog'
-description: '🐶 Run sqlfluff with reviewdog on pull requests to improve code review experience.'
-author: 'yu-iskw'
+description: '🐶 Run sqlfluff with reviewdog on PRs and commit the changes.'
+author: 'rbrooks'
 inputs:
   github_token:
     description: 'GITHUB_TOKEN'
