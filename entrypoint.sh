@@ -35,7 +35,7 @@ sqlfluff --version
 echo '::endgroup::'
 
 # Install extra python modules
-echo '::group:: Installing extra python modules'
+echo '::group:: Installing extra Python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
   pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
   # Make sure the installed modules
@@ -55,7 +55,7 @@ echo '::endgroup::'
 
 # Lint changed files if the mode is lint
 if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
-  echo '::group:: Running sqlfluff 🐶 ...'
+  echo '::group:: Running SQLFluff 🐶 ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
   lint_results="sqlfluff-lint.json"
@@ -80,7 +80,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  echo '::group:: Running reviewdog 🐶 ...'
+  echo '::group:: Running ReviewDog 🐶 ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
 
@@ -109,7 +109,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
 
 # Format changed files if the mode is fix
 elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
-  echo '::group:: Running sqlfluff 🐶 ...'
+  echo '::group:: Running SQLFluff 🐶 ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
   # shellcheck disable=SC2086,SC2046
@@ -123,14 +123,14 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
     $changed_files
-  sqlfluff_exit_code=$?   
+  sqlfluff_exit_code=$?
   echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
-  
+
   set -Eeuo pipefail
   echo '::endgroup::'
 
   # SEE https://github.com/reviewdog/action-suggester/blob/master/script.sh
-  echo '::group:: Running reviewdog 🐶 ...'
+  echo '::group:: Running ReviewDog 🐶 ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
 
@@ -158,6 +158,6 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   # exit $exit_code
 # END OF fix
 else
-  echo 'ERROR: SQLFLUFF_COMMAND must be one of lint and fix'
+  echo 'ERROR: SQLFLUFF_COMMAND must be "lint" or "fix"'
   exit 1
 fi
