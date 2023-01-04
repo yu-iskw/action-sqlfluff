@@ -178,8 +178,8 @@ elif [[ "${SQLFLUFF_COMMAND}" == "commit" ]]; then
 
   git config user.name github-actions
   git config user.email github-actions@github.com
-  git commit -a -m "🤖 CI: SQL Fluff fixes"
-  git push origin "$SOURCE_REFERENCE"
+  git commit -a -m '🤖 CI: SQL Fluff fixes'
+  git push origin $GITHUB_PULL_REQUEST_BASE_REF
 
   set -Eeuo pipefail
   echo '::endgroup::'
