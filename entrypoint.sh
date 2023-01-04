@@ -137,9 +137,11 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   # Commit the differences
   # temp_file=$(mktemp)
   # git diff | tee "${temp_file}"
+  git config user.name "SQL Fluff"
+  git config user.email "rbrooks@trainual.com"
   git add .
-  git commit --author="SQL Fluff <sqlfluff@trainual.com>" -m "SQL Fluff linting fixes"
-  git push origin HEAD:main
+  git commit -m "SQL Fluff linting fixes"
+  git push
 
   # shellcheck disable=SC2034
   # reviewdog \
