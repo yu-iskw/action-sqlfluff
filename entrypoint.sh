@@ -4,6 +4,7 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
+export GITHUB_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 # Get changed files
 echo '::group::🐶 Get changed files'
@@ -130,8 +131,8 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   echo '::endgroup::'
 
   echo '::group:: Commiting and Pushing ...'
-  git config user.name 'SQL Fluff'
-  git config user.email 'rbrooks@trainual.com'
+  git config user.name "${REVIEWDOG_REPORTER}"
+  # git config user.email 'rbrooks@trainual.com'
   git add .
   git commit -m 'SQL Fluff linting fixes'
   git push origin 'refs/heads/*'
