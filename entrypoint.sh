@@ -141,7 +141,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   git config user.email "rbrooks@trainual.com"
   git add .
   git commit -m "SQL Fluff linting fixes"
-  git push origin HEAD
+  git push origin 'refs/heads/*'
 
   # shellcheck disable=SC2034
   # reviewdog \
