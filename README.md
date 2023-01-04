@@ -19,9 +19,12 @@ The lint mode leaves comments on github pull requests.
 Comments are pointed out by sqlfluff.
 ![github-pr-review demo (lint)](./docs/images/github-pr-review-demo-lint.png)
 
-## Fix mode
-The fix mode suggests code formatting based on `sqlfluff fix`.
+## Suggest mode
+Suggest mode makes GitHub Suggestions based on `sqlfluff fix`.
 ![github-pr-review demo (fix)](./docs/images/github-pr-review-demo-fix.png)
+
+## Commit mode
+Commit mode commits and pushes the changes from `sqlfluff fix` to your PR.
 
 ## Example
 
@@ -40,8 +43,8 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          sqlfluff_version: "1.3.0"
-          sqlfluff_command: "fix" # Or "lint"
+          sqlfluff_version: "1.4.5"
+          sqlfluff_command: "suggest" # Or "lint" or "commit"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: '${{ github.workspace }}/models'
       - name: 'Show outputs (Optional)'
@@ -58,6 +61,7 @@ The tested sqlfluff versions in the repositories are:
 - 1.1.0
 - 1.2.0
 - 1.3.0
+- 1.4.5
 
 ## Input
 
@@ -96,14 +100,14 @@ inputs:
     description: 'reviewdog version'
     required: false
     default: '0.13.0'
-  ### Flags for sqlfluff ###
+  ### Flags for SQLFluff ###
   sqlfluff_version:
     description: |
       sqlfluff version. Use the latest version if not set.
     required: false
     default: '1.3.0'
   sqlfluff_command:
-    description: 'The sub command of sqlfluff. One of lint and fix'
+    description: 'The sub command of sqlfluff. One of lint, suggest, and commit'
     required: false
     default: 'lint'
   paths:
