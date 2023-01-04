@@ -10,9 +10,9 @@
 
 
 This is a github action to lint and fix SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
-The action has the two modes corresponding to `sqlfluff lint` and `sqlfluff fix`.
-One is to automatically leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
-The other is to automatically suggests code formatting on github pull request with reviewdog too.
+The action has 3 modes corresponding to `sqlfluff lint` and `sqlfluff fix`.
+One leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
+The other makes GitHub Suggestions on the PR. The 3rd commits those changes.
 
 ## Lint mode
 The lint mode leaves comments on github pull requests.
