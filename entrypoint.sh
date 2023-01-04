@@ -132,7 +132,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
 
   echo '::group:: Commiting and Pushing ...'
   git config --global user.name "${REVIEWDOG_REPORTER}"
-  # git config user.email 'rbrooks@trainual.com'
+  git config --global user.email 'rbrooks@trainual.com'
   git add .
   git commit -m 'SQL Fluff linting fixes'
   git push origin 'refs/heads/*'
