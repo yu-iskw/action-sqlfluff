@@ -4,10 +4,9 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
-export GITHUB_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 # Get changed files
-echo '::group::🐶 Get changed files'
+echo '::group:: Δ Get changed files'
 # The command is necessary to get changed files.
 # TODO Fetch only the target branch
 git fetch --prune --unshallow --no-tags
@@ -29,9 +28,9 @@ fi
 echo '::endgroup::'
 
 # Install sqlfluff
-echo '::group::🐶 Installing SQL Fluff ... https://github.com/sqlfluff/sqlfluff'
+echo '::group:: 💾 Installing SQLFluff ... https://github.com/sqlfluff/sqlfluff'
 pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
-# Make sure the version of sqlfluff
+# Output version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
 
@@ -56,7 +55,7 @@ echo '::endgroup::'
 
 # Lint changed files if the mode is lint
 if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
-  echo '::group:: Running SQLFluff 🐶 ...'
+  echo '::group:: 📜 Running SQLFluff Lint ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
   lint_results="sqlfluff-lint.json"
@@ -81,7 +80,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  echo '::group:: Running ReviewDog 🐶 ...'
+  echo '::group:: 🐶 Running ReviewDog...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
 
@@ -106,12 +105,56 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo '::endgroup::'
 
   exit $sqlfluff_exit_code
-# END OF lint
+elif [[ "${SQLFLUFF_COMMAND}" == "suggest" ]]; then
+  # Makes fixes as GitHut Suggestions
+  echo '::group:: 📜 Running SQLFluff...'
+  # Allow failures now, as Review Dog handles them
+  set +Eeuo pipefail
+  sqlfluff fix --force \
+    $(if [[ "x${SQLFLUFF_CONFIG}" != "x" ]]; then echo "--config ${SQLFLUFF_CONFIG}"; fi) \
+    $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
+    $(if [[ "x${SQLFLUFF_PROCESSES}" != "x" ]]; then echo "--processes ${SQLFLUFF_PROCESSES}"; fi) \
+    $(if [[ "x${SQLFLUFF_RULES}" != "x" ]]; then echo "--rules ${SQLFLUFF_RULES}"; fi) \
+    $(if [[ "x${SQLFLUFF_EXCLUDE_RULES}" != "x" ]]; then echo "--exclude-rules ${SQLFLUFF_EXCLUDE_RULES}"; fi) \
+    $(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
+    $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
+    $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
+    $changed_files
+  sqlfluff_exit_code=$?
+  echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
 
-# Format changed files if the mode is fix
-elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
-  echo '::group:: Running SQLFluff 🐶 ...'
+  set -Eeuo pipefail
+  echo '::endgroup::'
+
+  # SEE https://github.com/reviewdog/action-suggester/blob/master/script.sh
+  echo '::group:: 🐶 Running ReviewDog ...'
   # Allow failures now, as reviewdog handles them
+  set +Eeuo pipefail
+
+  # Suggest the differences
+  temp_file=$(mktemp)
+  git diff | tee "${temp_file}"
+  git stash -u
+
+  # shellcheck disable=SC2034
+  reviewdog \
+    -name="sqlfluff-fix" \
+    -f=diff \
+    -f.diff.strip=1 \
+    -reporter="${REVIEWDOG_REPORTER}" \
+    -filter-mode="${REVIEWDOG_FILTER_MODE}" \
+    -fail-on-error="${REVIEWDOG_FAIL_ON_ERROR}" \
+    -level="${REVIEWDOG_LEVEL}" <"${temp_file}" || exit_code=$?
+
+  # Clean up
+  git stash drop || true
+  set -Eeuo pipefail
+  echo '::endgroup::'
+
+  exit $sqlfluff_exit_code
+  # END OF fix
+elif [[ "${SQLFLUFF_COMMAND}" == "commit" ]]; then
+  echo '::group:: 📜 Running SQLFluff Fix then committing...'
   set +Eeuo pipefail
   # shellcheck disable=SC2086,SC2046
   sqlfluff fix --force \
@@ -127,24 +170,23 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   sqlfluff_exit_code=$?
   echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
 
-  # set -Eeuo pipefail
-  # echo '::endgroup::'
+  set -Eeuo pipefail
+  echo '::endgroup::'
 
-  # echo '::group:: ⛙ Commiting and Pushing ...'
-  # git config --global user.name "${REVIEWDOG_REPORTER}"
-  # git config --global user.email 'rbrooks@trainual.com'
-  # git fetch
-  # git add .
-  # git commit -m 'SQL Fluff linting fixes'
-  # git push origin 'refs/heads/*'
+  # Commit the changes after correcting.
+  echo '::group:: ⛙ Merging changes...'
 
-  # set -Eeuo pipefail
-  # echo '::endgroup::'
+  git config user.name github-actions
+  git config user.email github-actions@github.com
+  git commit -a -m "🤖 CI: SQL Fluff fixes"
+  git push origin "$SOURCE_REFERENCE"
+
+  set -Eeuo pipefail
+  echo '::endgroup::'
 
   exit $sqlfluff_exit_code
-  # exit $exit_code
-# END OF fix
+  # END OF commit
 else
-  echo 'ERROR: SQLFLUFF_COMMAND must be "lint" or "fix"'
+  echo "ERROR: SQLFLUFF_COMMAND must be one of 'lint', 'suggest', or 'commit'"
   exit 1
 fi
