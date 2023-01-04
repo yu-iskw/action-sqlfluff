@@ -29,14 +29,14 @@ fi
 echo '::endgroup::'
 
 # Install sqlfluff
-echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
+echo '::group::🐶 Installing SQL Fluff ... https://github.com/sqlfluff/sqlfluff'
 pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
 # Make sure the version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
 
 # Install extra python modules
-echo '::group:: Installing extra Python modules'
+echo '::group:: 🐍 Installing extra Python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
   pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
   # Make sure the installed modules
@@ -45,7 +45,7 @@ fi
 echo '::endgroup::'
 
 # Install dbt packages
-echo '::group:: Installing dbt packages'
+echo '::group:: 📦 Installing dbt packages'
 if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]]; then
   defulat_dir="$(pwd)"
   cd "$INPUT_WORKING_DIRECTORY"
@@ -130,9 +130,10 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  echo '::group:: Commiting and Pushing ...'
+  echo '::group:: ⛙ Commiting and Pushing ...'
   git config --global user.name "${REVIEWDOG_REPORTER}"
   git config --global user.email 'rbrooks@trainual.com'
+  git fetch
   git add .
   git commit -m 'SQL Fluff linting fixes'
   git push origin 'refs/heads/*'
