@@ -129,32 +129,13 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  # SEE https://github.com/reviewdog/action-suggester/blob/master/script.sh
-  echo '::group:: Running ReviewDog 🐶 ...'
-  # Allow failures now, as reviewdog handles them
-  set +Eeuo pipefail
-
-  # Commit the differences
-  # temp_file=$(mktemp)
-  # git diff | tee "${temp_file}"
-  git config user.name "SQL Fluff"
-  git config user.email "rbrooks@trainual.com"
+  echo '::group:: Commiting and Pushing ...'
+  git config user.name 'SQL Fluff'
+  git config user.email 'rbrooks@trainual.com'
   git add .
-  git commit -m "SQL Fluff linting fixes"
+  git commit -m 'SQL Fluff linting fixes'
   git push origin 'refs/heads/*'
 
-  # shellcheck disable=SC2034
-  # reviewdog \
-  #   -name="sqlfluff-fix" \
-  #   -f=diff \
-  #   -f.diff.strip=1 \
-  #   -reporter="${REVIEWDOG_REPORTER}" \
-  #   -filter-mode="${REVIEWDOG_FILTER_MODE}" \
-  #   -fail-on-error="${REVIEWDOG_FAIL_ON_ERROR}" \
-  #   -level="${REVIEWDOG_LEVEL}" <"${temp_file}" || exit_code=$?
-
-  # Clean up
-  # git stash drop || true
   set -Eeuo pipefail
   echo '::endgroup::'
 
