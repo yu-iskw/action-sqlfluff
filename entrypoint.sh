@@ -127,19 +127,19 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   sqlfluff_exit_code=$?
   echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
 
-  set -Eeuo pipefail
-  echo '::endgroup::'
+  # set -Eeuo pipefail
+  # echo '::endgroup::'
 
-  echo '::group:: ⛙ Commiting and Pushing ...'
-  git config --global user.name "${REVIEWDOG_REPORTER}"
-  git config --global user.email 'rbrooks@trainual.com'
-  git fetch
-  git add .
-  git commit -m 'SQL Fluff linting fixes'
-  git push origin 'refs/heads/*'
+  # echo '::group:: ⛙ Commiting and Pushing ...'
+  # git config --global user.name "${REVIEWDOG_REPORTER}"
+  # git config --global user.email 'rbrooks@trainual.com'
+  # git fetch
+  # git add .
+  # git commit -m 'SQL Fluff linting fixes'
+  # git push origin 'refs/heads/*'
 
-  set -Eeuo pipefail
-  echo '::endgroup::'
+  # set -Eeuo pipefail
+  # echo '::endgroup::'
 
   exit $sqlfluff_exit_code
   # exit $exit_code
