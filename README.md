@@ -24,9 +24,10 @@ Suggest mode makes GitHub Suggestions based on `sqlfluff fix`.
 ![github-pr-review demo (fix)](./docs/images/github-pr-review-demo-fix.png)
 
 ## Commit mode
+
 Commit mode commits and pushes the changes from `sqlfluff fix` to your PR.
 
-## Example
+## Example: Suggest Mode
 
 ```yaml
 name: sqlfluff with reviewdog
@@ -54,6 +55,52 @@ jobs:
           echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
 ```
 
+## Example: Commit mode
+
+This also differs from the upstream action in that it:
+
+1. Writes the GCP-SA-Key Secret to disk, then uses that to authenticate with BigQuery. In dbt mode, SQL Fluff reads some metadata from the DB.
+1. Does the Git Checkout in such a way that doesn't leave it in a detached-HEAD state. The `with:` block on `checkout@v3`.
+
+```yaml
+name: 📜 SQLFluff
+on:
+  pull_request:
+
+jobs:
+  format_fix:
+    runs-on: ubuntu-latest
+    env:
+      DBT_PROFILES_DIR: ${{ github.workspace }}/.github/ci_cd
+      PR_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - name: 🛒 Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: 🔑 Write GCP Service-Acct Key
+        env:
+          BIGQUERY_KEYFILE: ${{ secrets.BIGQUERY_KEYFILE }}
+        run: |
+          echo "$BIGQUERY_KEYFILE" > ${{ github.workspace }}/.github/ci_cd/dbt-service-account.json
+      - name: 📜 SQLFLuff
+        uses: trainual/action-sqlfluff-commits@main
+        id: lint-sql
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          sqlfluff_version: 1.4.5
+          sqlfluff_command: commit
+          templater: dbt
+          config: ${{ github.workspace }}/.sqlfluff
+          paths: ${{ github.workspace }}/models
+          extra_requirements_txt: ${{ github.workspace }}/.github/ci_cd/requirements.txt
+      - name: 🐣 Show outputs
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
+```
 
 ## NOTE
 The tested sqlfluff versions in the repositories are:
