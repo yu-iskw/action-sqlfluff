@@ -46,7 +46,7 @@ inputs:
     required: false
     default: '1.3.0'
   sqlfluff_command:
-    description: 'The sub command of sqlfluff. One of lint, fix, or commit'
+    description: 'Lint, fix, or commit'
     required: false
     default: 'lint'
   paths:

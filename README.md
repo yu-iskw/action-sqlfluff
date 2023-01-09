@@ -51,7 +51,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           sqlfluff_version: "1.4.5"
-          sqlfluff_command: "suggest" # Or "lint" or "commit"
+          sqlfluff_command: "fix" # Or "lint" or "commit"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: '${{ github.workspace }}/models'
       - name: 'Show outputs (Optional)'
