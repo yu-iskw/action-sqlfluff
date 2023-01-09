@@ -105,7 +105,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo '::endgroup::'
 
   exit $sqlfluff_exit_code
-elif [[ "${SQLFLUFF_COMMAND}" == "suggest" ]]; then
+elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   # Makes fixes as GitHut Suggestions
   echo '::group:: 📜 Running SQLFluff...'
   # Allow failures now, as Review Dog handles them
@@ -156,7 +156,6 @@ elif [[ "${SQLFLUFF_COMMAND}" == "suggest" ]]; then
 elif [[ "${SQLFLUFF_COMMAND}" == "commit" ]]; then
   echo '::group:: 📜 Running SQLFluff Fix then committing...'
   set +Eeuo pipefail
-  # shellcheck disable=SC2086,SC2046
   sqlfluff fix --force \
     $(if [[ "x${SQLFLUFF_CONFIG}" != "x" ]]; then echo "--config ${SQLFLUFF_CONFIG}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
@@ -189,6 +188,6 @@ elif [[ "${SQLFLUFF_COMMAND}" == "commit" ]]; then
   exit $sqlfluff_exit_code
   # END OF commit
 else
-  echo "ERROR: SQLFLUFF_COMMAND must be one of 'lint', 'suggest', or 'commit'"
+  echo "ERROR: SQLFLUFF_COMMAND must be one of 'lint', 'fix', or 'commit'"
   exit 1
 fi

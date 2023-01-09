@@ -9,25 +9,31 @@
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 
-This is a github action to lint and fix SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
-The action has 3 modes corresponding to `sqlfluff lint` and `sqlfluff fix`.
-One leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
-The other makes GitHub Suggestions on the PR. The 3rd commits those changes.
+This is a Github Action to lint and fix SQL on PRs with [SQLFluff](https://github.com/sqlfluff/sqlfluff).
 
-## Lint mode
-The lint mode leaves comments on github pull requests.
-Comments are pointed out by sqlfluff.
+Supports 3 operations:
+
+* **"lint"** - Runs `sqlfluff lint`
+* **"fix"** - Runs `sqlfluff fix` then makes GitHub Suggestions on the PR.
+* **"commit"** - Runs "fix" then commits those changes.
+
+This uses [ReviewDog](https://github.com/reviewdog/reviewdog) to Post comments and suggestions on the PR.
+
+## Lint Mode
+
+The lint mode leaves comments on github pull requests. Comments are pointed out by SQLFluff.
 ![github-pr-review demo (lint)](./docs/images/github-pr-review-demo-lint.png)
 
-## Suggest mode
+## Fix Mode
+
 Suggest mode makes GitHub Suggestions based on `sqlfluff fix`.
 ![github-pr-review demo (fix)](./docs/images/github-pr-review-demo-fix.png)
 
-## Commit mode
+## Commit Mode
 
 Commit mode commits and pushes the changes from `sqlfluff fix` to your PR.
 
-## Example: Suggest Mode
+## Example: Fix Mode
 
 ```yaml
 name: sqlfluff with reviewdog
@@ -59,7 +65,7 @@ jobs:
 
 This example differs slightly in that it:
 
-1. Writes the GCP-SA-Key Secret to disk, then uses that to authenticate with BigQuery. In dbt mode, SQL Fluff reads some metadata from the DB.
+1. Writes the GCP-SA-Key Secret to disk, then uses that to authenticate with BigQuery. In dbt mode, SQLFluff reads some metadata from the DB.
 1. Does the Git Checkout in such a way that doesn't leave it in a detached-HEAD state. The `with:` block on `checkout@v3`.
 
 ```yaml
@@ -154,7 +160,7 @@ inputs:
     required: false
     default: '1.3.0'
   sqlfluff_command:
-    description: 'The operation to perform. One of lint, suggest, and commit'
+    description: 'The operation to perform. One of lint, fix, and commit'
     required: false
     default: 'lint'
   paths:
