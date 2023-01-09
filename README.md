@@ -38,7 +38,7 @@ jobs:
     name: runner / sqlfluff (github-check)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: yu-iskw/action-sqlfluff@v3
         id: lint-sql
         with:
@@ -57,7 +57,7 @@ jobs:
 
 ## Example: Commit mode
 
-This also differs from the upstream action in that it:
+This example differs slightly in that it:
 
 1. Writes the GCP-SA-Key Secret to disk, then uses that to authenticate with BigQuery. In dbt mode, SQL Fluff reads some metadata from the DB.
 1. Does the Git Checkout in such a way that doesn't leave it in a detached-HEAD state. The `with:` block on `checkout@v3`.
@@ -154,7 +154,7 @@ inputs:
     required: false
     default: '1.3.0'
   sqlfluff_command:
-    description: 'The sub command of sqlfluff. One of lint, suggest, and commit'
+    description: 'The operation to perform. One of lint, suggest, and commit'
     required: false
     default: 'lint'
   paths:
