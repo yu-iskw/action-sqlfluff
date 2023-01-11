@@ -1,4 +1,6 @@
 #!/bin/bash
+# shellcheck disable=SC2086
+# NOTE: Ignore violations as 'echo "name=foo::bar" >> $GITHUB_OUTPUT'.
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
