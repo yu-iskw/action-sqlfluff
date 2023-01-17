@@ -38,7 +38,7 @@ jobs:
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
           extra_requirements_txt: "${{ github.workspace }}/testdata/test_failed_dbt/extra_requirements.txt"
       - name: check the exit code
-        if: ${{ !success() }}
+        if: ${{ success() }}
         run: echo 'The previous step should fail' && exit 1
       - name: "Test outputs"
         if: always()
