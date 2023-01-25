@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "github sqlfluff action"
+version = "0.1.0"
+description = "example query to test snowflake functionality"
+authors = ["datapals <datapals@squareup.com>"]
+
+[tool.poetry.dependencies]
+python = "3.9.10"
+dbt-core = "1.3.2"
+sqlfluff = "1.4.5"
+sqlfluff-templater-dbt = "1.4.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

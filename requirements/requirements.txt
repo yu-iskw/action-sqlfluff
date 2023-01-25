@@ -1,2 +1,0 @@
-sqlfluff==${SQLFLUFF_VERSION}
-sqlfluff-templater-dbt==${SQLFLUFF_VERSION}
