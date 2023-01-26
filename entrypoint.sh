@@ -61,9 +61,18 @@ echo '::endgroup::'
 # Lint changed files if the mode is lint
 if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo '::group:: Running sqlfluff 🐶 ...'
+  
   cat "$SQLFLUFF_CONFIG"
   sqlfluff --version
   dbt --version
+  echo $SQLFLUFF_CONFIG
+  echo $SQLFLUFF_DIALECT
+  echo $SQLFLUFF_PROCESSES
+  echo $SQLFLUFF_RULES
+  echo $SQLFLUFF_EXCLUDE_RULES
+  echo $SQLFLUFF_TEMPLATER
+  echo $SQLFLUFF_DISABLE_NOQA
+
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
   lint_results="sqlfluff-lint.json"
@@ -77,7 +86,6 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
       $(if [[ "x${SQLFLUFF_EXCLUDE_RULES}" != "x" ]]; then echo "--exclude-rules ${SQLFLUFF_EXCLUDE_RULES}"; fi) \
       $(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
       $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
-      # $changed_files |
       models/dtc/base/seed/seed_postal_code_coordinates.sql |
     grep '^\[' \
     >> "$lint_results"
