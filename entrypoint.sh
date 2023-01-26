@@ -62,6 +62,7 @@ echo '::endgroup::'
 if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo '::group:: Running sqlfluff 🐶 ...'
   cat "$SQLFLUFF_CONFIG"
+  sqlfluff --version
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
   lint_results="sqlfluff-lint.json"
