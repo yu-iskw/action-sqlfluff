@@ -72,6 +72,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo $SQLFLUFF_EXCLUDE_RULES
   echo $SQLFLUFF_TEMPLATER
   echo $SQLFLUFF_DISABLE_NOQA
+  cat models/dtc/base/seed/seed_postal_code_coordinates.sql
 
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
