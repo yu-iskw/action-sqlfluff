@@ -29,20 +29,24 @@ if [[ "${changed_files}" == "" ]]; then
 fi
 echo '::endgroup::'
 
-# Install sqlfluff
-echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
-# Make sure the version of sqlfluff
-sqlfluff --version
-echo '::endgroup::'
-
 # Install extra python modules
+"""Need to install these (particularly dbt-bigquery before sqlfluff because otherwise when installing sqlfluff it seems
+to automatically install the latest version of dbt_core package which it turns out can be incompatible with that
+version of sqlfluff)
+"""
 echo '::group:: Installing extra python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
   pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
   # Make sure the installed modules
   pip list
 fi
+echo '::endgroup::'
+
+# Install sqlfluff
+echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
+pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
+# Make sure the version of sqlfluff
+sqlfluff --version
 echo '::endgroup::'
 
 # Install dbt packages
