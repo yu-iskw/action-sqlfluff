@@ -30,10 +30,9 @@ fi
 echo '::endgroup::'
 
 # Install extra python modules
-"""Need to install these (particularly dbt-bigquery before sqlfluff because otherwise when installing sqlfluff it seems
-to automatically install the latest version of dbt_core package which it turns out can be incompatible with that
-version of sqlfluff)
-"""
+# Need to install these (particularly dbt-bigquery before sqlfluff because otherwise when installing sqlfluff it seems
+# to automatically install the latest version of dbt_core package which it turns out can be incompatible with that
+# version of sqlfluff)
 echo '::group:: Installing extra python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
   pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
