@@ -77,6 +77,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
   lint_results="sqlfluff-lint.json"
+  cat $lint_results
+
   # shellcheck disable=SC2086,SC2046
   sqlfluff lint \
       --format json \
@@ -90,6 +92,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
       models/dtc/base/seed/seed_postal_code_coordinates.sql |
     grep '^\[' \
     >> "$lint_results"
+
   sqlfluff_exit_code="${PIPESTATUS[0]}"
   echo "sqlfluff_exit_code = $sqlfluff_exit_code"
 
