@@ -1,4 +1,6 @@
 #!/bin/bash
+# shellcheck disable=SC2086
+# NOTE: Ignore violations as 'echo "name=foo::bar" >> $GITHUB_OUTPUT'.
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
@@ -21,8 +23,8 @@ echo "$changed_files"
 # Halt the job
 if [[ "${changed_files}" == "" ]]; then
   echo "There is no changed files. The action doesn't scan files."
-  echo "::set-output name=sqlfluff-exit-code::0"
-  echo "::set-output name=reviewdog-return-code::0"
+  echo "name=sqlfluff-exit-code::0" >> $GITHUB_OUTPUT
+  echo "name=reviewdog-return-code::0" >> $GITHUB_OUTPUT
   exit 0
 fi
 echo '::endgroup::'
@@ -80,8 +82,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   cat "$lint_results"
   echo "echo and cat lint_results end"
 
-  echo "::set-output name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" # Convert to a single line
-  echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
+  echo "name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" >> $GITHUB_OUTPUT # Convert to a single line
+  echo "name=sqlfluff-exit-code::${sqlfluff_exit_code}" >> $GITHUB_OUTPUT
 
   set -Eeuo pipefail
   echo '::endgroup::'
@@ -109,8 +111,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
       -level="${REVIEWDOG_LEVEL}"
   reviewdog_return_code="${PIPESTATUS[1]}"
 
-  echo "::set-output name=sqlfluff-results-rdjson::$(cat <"$lint_results_rdjson" | jq -r -c '.')" # Convert to a single line
-  echo "::set-output name=reviewdog-return-code::${reviewdog_return_code}"
+  echo "name=sqlfluff-results-rdjson::$(cat <"$lint_results_rdjson" | jq -r -c '.')" >> $GITHUB_OUTPUT # Convert to a single line
+  echo "name=reviewdog-return-code::${reviewdog_return_code}" >> $GITHUB_OUTPUT
 
   set -Eeuo pipefail
   echo '::endgroup::'
@@ -137,7 +139,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   sqlfluff_exit_code=$?   
   echo '$sqlfluff_exit_code ='
   echo $sqlfluff_exit_code
-  echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"    
+  echo "name=sqlfluff-exit-code::${sqlfluff_exit_code}" >> $GITHUB_OUTPUT
   set -Eeuo pipefail
   echo '::endgroup::'
 
