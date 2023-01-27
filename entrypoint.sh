@@ -75,9 +75,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   cat models/dtc/base/seed/seed_postal_code_coordinates.sql
   
   # Need to materialize models, in particular the incremental ones, because what gets compiled depends on whether they already exist in the DWH.
-  # TODO - grab just the changed files and materialized them
   # TODO - grab just the intersection of incremental models and changed files to be materialized
-  dbt run --vars 'do_limit_0: true' --full-refresh -s seed_postal_code_coordinates,config.materialized:incremental --exclude package:fivetran_log
+  # dbt run --vars 'do_limit_0: true' --full-refresh -s seed_postal_code_coordinates,config.materialized:incremental --exclude package:fivetran_log
   dbt compile -s seed_postal_code_coordinates
   cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
 
