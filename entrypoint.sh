@@ -72,13 +72,6 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo $SQLFLUFF_EXCLUDE_RULES
   echo $SQLFLUFF_TEMPLATER
   echo $SQLFLUFF_DISABLE_NOQA
-  cat models/dtc/base/seed/seed_postal_code_coordinates.sql
-  
-  # Need to materialize models, in particular the incremental ones, because what gets compiled depends on whether they already exist in the DWH.
-  # TODO - grab just the intersection of incremental models and changed files to be materialized
-  # dbt run --vars 'do_limit_0: true' --full-refresh -s seed_postal_code_coordinates,config.materialized:incremental --exclude package:fivetran_log
-  # dbt compile -s seed_postal_code_coordinates
-  # cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
 
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
@@ -101,8 +94,6 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
 
   sqlfluff_exit_code="${PIPESTATUS[0]}"
   echo "sqlfluff_exit_code = $sqlfluff_exit_code"
-
-  # cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
 
   echo "echo and cat lint_results start"
   echo "echo lint_results = $lint_results"
