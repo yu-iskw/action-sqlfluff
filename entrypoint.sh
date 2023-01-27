@@ -74,7 +74,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo $SQLFLUFF_DISABLE_NOQA
   cat models/dtc/base/seed/seed_postal_code_coordinates.sql
   
-  dbt compile -s seed_postal_code_coordinates.sql
+  dbt run --vars 'do_limit_0: true' --selector limit_0_exclude_fivetran_log --full-refresh -s seed_postal_code_coordinates
+  dbt compile -s seed_postal_code_coordinates
   cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
 
   # Allow failures now, as reviewdog handles them
