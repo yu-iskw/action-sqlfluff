@@ -73,6 +73,9 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo $SQLFLUFF_TEMPLATER
   echo $SQLFLUFF_DISABLE_NOQA
   cat models/dtc/base/seed/seed_postal_code_coordinates.sql
+  
+  dbt compile -s seed_postal_code_coordinates.sql
+  cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
 
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
@@ -95,6 +98,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
 
   sqlfluff_exit_code="${PIPESTATUS[0]}"
   echo "sqlfluff_exit_code = $sqlfluff_exit_code"
+
+  cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
 
   echo "echo and cat lint_results start"
   echo "echo lint_results = $lint_results"
