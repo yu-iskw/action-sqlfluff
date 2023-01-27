@@ -77,8 +77,8 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   # Need to materialize models, in particular the incremental ones, because what gets compiled depends on whether they already exist in the DWH.
   # TODO - grab just the intersection of incremental models and changed files to be materialized
   # dbt run --vars 'do_limit_0: true' --full-refresh -s seed_postal_code_coordinates,config.materialized:incremental --exclude package:fivetran_log
-  dbt compile -s seed_postal_code_coordinates
-  cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
+  # dbt compile -s seed_postal_code_coordinates
+  # cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
 
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
@@ -95,14 +95,14 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
       $(if [[ "x${SQLFLUFF_EXCLUDE_RULES}" != "x" ]]; then echo "--exclude-rules ${SQLFLUFF_EXCLUDE_RULES}"; fi) \
       $(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
       $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
-      models/dtc/base/seed/seed_postal_code_coordinates.sql |
+      $changed_files |
     grep '^\[' \
     >> "$lint_results"
 
   sqlfluff_exit_code="${PIPESTATUS[0]}"
   echo "sqlfluff_exit_code = $sqlfluff_exit_code"
 
-  cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
+  # cat target/compiled/on_running/models/dtc/base/seed/seed_postal_code_coordinates.sql
 
   echo "echo and cat lint_results start"
   echo "echo lint_results = $lint_results"
