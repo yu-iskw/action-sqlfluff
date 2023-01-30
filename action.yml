@@ -14,10 +14,6 @@ inputs:
     description: 'working directory'
     required: false
     default: '${{ github.workspace }}'
-  pip_version:
-    description: 'pip version'
-    required: false
-    default: '22.3.1'
   ### Flags for reviewdog ###
   level:
     description: 'Report level for reviewdog [info,warning,error]'
@@ -157,7 +153,6 @@ runs:
     # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
     INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
     INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
-    PIP_VERSION: ${{ inputs.pip_version }}
     REVIEWDOG_LEVEL: ${{ inputs.level }}
     REVIEWDOG_REPORTER: ${{ inputs.reporter }}
     REVIEWDOG_FILTER_MODE: ${{ inputs.filter_mode }}

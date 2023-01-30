@@ -5,11 +5,6 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
-# Upgrade pip
-if [[ -n "PIP_VERSION" ]] ; then
-  pip install -U pip=="${PIP_VERSION:?}"
-fi
-
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 # Avoid 'fatal: detected dubious ownership in repository'
