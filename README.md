@@ -60,6 +60,11 @@ The tested sqlfluff versions in the repositories are:
 - 1.3.0
 - 1.4.5
 
+## CAUTION
+Because dbt-core==1.4 changes the implementation of custom exceptions like `CompilationException`, sqlfluff 1.4.5 or less doesn't work with dbt-core 1.4 or later.
+So, we have to use dbt-core 1.3 or less until the subsequent change is released.
+- [Handle renamed dbt exceptions by greg\-finley · Pull Request \#4317 · sqlfluff/sqlfluff](https://github.com/sqlfluff/sqlfluff/pull/4317)
+
 ## Input
 
 ```yaml
