@@ -13,6 +13,9 @@ echo '::group::🐶 Get changed files'
 # TODO Fetch only the target branch
 git fetch --prune --unshallow --no-tags
 
+# Avoid 'fatal: detected dubious ownership in repository'
+git config --global --add safe.directory /github/workspace
+
 SQL_FILE_PATTERN="${FILE_PATTERN:?}"
 SOURCE_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
 changed_files=$(git diff --name-only --no-color "$SOURCE_REFERENCE" "HEAD" -- "${SQLFLUFF_PATHS:?}" |
