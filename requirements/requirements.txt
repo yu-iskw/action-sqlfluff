@@ -1,2 +1,7 @@
 sqlfluff==${SQLFLUFF_VERSION}
 sqlfluff-templater-dbt==${SQLFLUFF_VERSION}
+
+# `CompilationException` is no longer implemented from dbt-core==1.4.0.
+# So we have to use dbt-core 1.3 or less, until the subsequent fix is released.
+# SEE https://github.com/sqlfluff/sqlfluff/pull/4317
+dbt-core<1.4
