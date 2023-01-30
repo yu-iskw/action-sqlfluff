@@ -1,5 +1,7 @@
-dbt-postgres>=1.0.0,<2.0.0
-dbt-bigquery>=1.0.0,<2.0.0
-dbt-redshift>=1.0.0,<2.0.0
-dbt-snowflake>=1.0.0,<2.0.0
-dbt-spark[pyHive]>=1.0.0,<2.0.0
+# TODO loosen the version constrains, because sqlfluff 1.4.5 or less doesn't work with dbt-core 1.4 or later.
+# SEEhttps://github.com/sqlfluff/sqlfluff/pull/4317
+dbt-postgres>=1.0.0,<1.4
+dbt-bigquery>=1.0.0,<1.4
+dbt-redshift>=1.0.0,<1.4
+dbt-snowflake>=1.0.0,<1.4
+dbt-spark[pyHive]>=1.0.0,<1.4
