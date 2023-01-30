@@ -7,6 +7,9 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
+# Avoid 'fatal: detected dubious ownership in repository'
+git config --global --add safe.directory /github/workspace
+
 # Get changed files
 echo '::group::🐶 Get changed files'
 # The command is necessary to get changed files.
