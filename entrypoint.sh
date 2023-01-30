@@ -7,14 +7,14 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
+# Avoid 'fatal: detected dubious ownership in repository'
+git config --global --add safe.directory /github/workspace
+
 # Get changed files
 echo '::group::🐶 Get changed files'
 # The command is necessary to get changed files.
 # TODO Fetch only the target branch
 git fetch --prune --unshallow --no-tags
-
-# Avoid 'fatal: detected dubious ownership in repository'
-git config --global --add safe.directory /github/workspace
 
 SQL_FILE_PATTERN="${FILE_PATTERN:?}"
 SOURCE_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
