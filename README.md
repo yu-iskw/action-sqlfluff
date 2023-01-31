@@ -243,4 +243,42 @@ reviewdog version.
 
 ## Contributors
 <!-- readme: contributors -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/yu-iskw">
+            <img src="https://avatars.githubusercontent.com/u/1523515?v=4" width="100;" alt="yu-iskw"/>
+            <br />
+            <sub><b>Yu Ishikawa</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/vgw-chriskruger">
+            <img src="https://avatars.githubusercontent.com/u/118869997?v=4" width="100;" alt="vgw-chriskruger"/>
+            <br />
+            <sub><b>Chris Kruger</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/onesuper">
+            <img src="https://avatars.githubusercontent.com/u/977633?v=4" width="100;" alt="onesuper"/>
+            <br />
+            <sub><b>Dreamsome</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/snyk-bot">
+            <img src="https://avatars.githubusercontent.com/u/19733683?v=4" width="100;" alt="snyk-bot"/>
+            <br />
+            <sub><b>Snyk Bot</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/kieronellis">
+            <img src="https://avatars.githubusercontent.com/u/69465049?v=4" width="100;" alt="kieronellis"/>
+            <br />
+            <sub><b>Null</b></sub>
+        </a>
+    </td></tr>
+</table>
 <!-- readme: contributors -end -->
