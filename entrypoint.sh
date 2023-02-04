@@ -9,6 +9,7 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 # Avoid 'fatal: detected dubious ownership in repository'
 git config --global --add safe.directory /github/workspace
+git config --global core.quotepath false
 
 # Get changed files
 echo '::group::🐶 Get changed files'
