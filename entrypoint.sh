@@ -5,7 +5,7 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
-export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
+# export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
 # Avoid 'fatal: detected dubious ownership in repository'
 git config --global --add safe.directory /github/workspace
@@ -104,6 +104,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   reviewdog_return_code="${PIPESTATUS[1]}"
 
   echo "name=sqlfluff-results-rdjson::$(cat <"$lint_results_rdjson" | jq -r -c '.')" >> $GITHUB_OUTPUT # Convert to a single line
+  echo "Aquí toy" >> $GITHUB_OUTPUT
   echo "name=reviewdog-return-code::${reviewdog_return_code}" >> $GITHUB_OUTPUT
 
   set -Eeuo pipefail
