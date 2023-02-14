@@ -104,7 +104,6 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   reviewdog_return_code="${PIPESTATUS[1]}"
 
   echo "name=sqlfluff-results-rdjson::$(cat <"$lint_results_rdjson" | jq -r -c '.')" >> $GITHUB_OUTPUT # Convert to a single line
-  echo "Aquí toy" >> $GITHUB_OUTPUT
   echo "name=reviewdog-return-code::${reviewdog_return_code}" >> $GITHUB_OUTPUT
 
   set -Eeuo pipefail
