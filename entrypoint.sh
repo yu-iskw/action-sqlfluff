@@ -14,7 +14,7 @@ git config --global --add safe.directory /github/workspace
 echo '::group::🐶 Get changed files'
 # The command is necessary to get changed files.
 # TODO Fetch only the target branch
-git fetch --prune --unshallow --no-tags
+git fetch --prune --depth 10000 --no-tags
 
 SQL_FILE_PATTERN="${FILE_PATTERN:?}"
 SOURCE_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
