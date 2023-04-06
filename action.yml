@@ -40,11 +40,11 @@ inputs:
     required: false
     default: 'v0.13.0'
   ### Flags for sqlfluff ###
-  sqlfluff_version:
-    description: |
-      sqlfluff version. Use the latest version if not set.
-    required: false
-    default: '1.3.0'
+  # sqlfluff_version:
+  #   description: |
+  #     sqlfluff version. Use the latest version if not set.
+  #   required: false
+  #   default: '1.3.0'
   sqlfluff_command:
     description: 'The sub command of sqlfluff. One of lint and fix'
     required: false
@@ -161,7 +161,7 @@ runs:
     REVIEWDOG_ESLINT_FLAGS: ${{ inputs.eslint_flags }}
     REVIEWDOG_TOOL_NAME: ${{ inputs.tool_name }}
     EXTRA_REQUIREMENTS_TXT: ${{ inputs.extra_requirements_txt }}
-    SQLFLUFF_VERSION: ${{ inputs.sqlfluff_version }}
+    # SQLFLUFF_VERSION: ${{ inputs.sqlfluff_version }}
     SQLFLUFF_COMMAND: ${{ inputs.sqlfluff_command }}
     SQLFLUFF_CONFIG: ${{ inputs.config }}
     SQLFLUFF_PATHS: ${{ inputs.paths }}

@@ -32,6 +32,7 @@ if [[ "${changed_files}" == "" ]]; then
 fi
 echo '::endgroup::'
 
+# CHANGE: We NEED to get the sqlfluff version as well as sqlfluff-templater-dbt version from this file, as well as the dbt-core and dbt-bigquery version.
 # Install extra python modules
 # Need to install these (particularly dbt-bigquery before sqlfluff because otherwise when installing sqlfluff it seems
 # to automatically install the latest version of dbt_core package which it turns out can be incompatible with that
@@ -44,12 +45,13 @@ if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
 fi
 echo '::endgroup::'
 
-# Install sqlfluff
-echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
-# Make sure the version of sqlfluff
-sqlfluff --version
-echo '::endgroup::'
+# CHANGE: Instead get the sqlfluff version from the extra requirements file, so all python packages are installed at once.
+# # Install sqlfluff
+# echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
+# pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
+# # Make sure the version of sqlfluff
+# sqlfluff --version
+# echo '::endgroup::'
 
 # Install dbt packages
 echo '::group:: Installing dbt packages'
