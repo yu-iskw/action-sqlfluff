@@ -9,3 +9,4 @@ dbt-core<1.4
 # sqlfluff
 sqlfluff==${SQLFLUFF_VERSION}
 sqlfluff-templater-dbt==${SQLFLUFF_VERSION}
+sqlparse>=0.4.4 # not directly required, pinned by Snyk to avoid a vulnerability
