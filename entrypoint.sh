@@ -11,7 +11,7 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 git config --global --add safe.directory /github/workspace
 
 # Get changed files
-echo '::group::🐶 Get changed files'
+echo '::group:: Δ Get changed files'
 # The command is necessary to get changed files.
 # TODO Fetch only the target branch
 git fetch --prune --unshallow --no-tags
@@ -33,14 +33,14 @@ fi
 echo '::endgroup::'
 
 # Install sqlfluff
-echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
+echo '::group:: 💾 Installing SQLFluff ... https://github.com/sqlfluff/sqlfluff'
 pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
-# Make sure the version of sqlfluff
+# Output version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
 
 # Install extra python modules
-echo '::group:: Installing extra python modules'
+echo '::group:: 🐍 Installing extra Python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
   pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
   # Make sure the installed modules
@@ -49,7 +49,7 @@ fi
 echo '::endgroup::'
 
 # Install dbt packages
-echo '::group:: Installing dbt packages'
+echo '::group:: 📦 Installing dbt packages'
 if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]]; then
   defulat_dir="$(pwd)"
   cd "$INPUT_WORKING_DIRECTORY"
@@ -60,7 +60,7 @@ echo '::endgroup::'
 
 # Lint changed files if the mode is lint
 if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
-  echo '::group:: Running sqlfluff 🐶 ...'
+  echo '::group:: 📜 Running SQLFluff Lint ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
   lint_results="sqlfluff-lint.json"
@@ -85,7 +85,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   set -Eeuo pipefail
   echo '::endgroup::'
 
-  echo '::group:: Running reviewdog 🐶 ...'
+  echo '::group:: 🐶 Running ReviewDog...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
 
@@ -110,14 +110,11 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
   echo '::endgroup::'
 
   exit $sqlfluff_exit_code
-# END OF lint
-
-# Format changed files if the mode is fix
 elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
-  echo '::group:: Running sqlfluff 🐶 ...'
-  # Allow failures now, as reviewdog handles them
+  # Makes fixes as GitHut Suggestions
+  echo '::group:: 📜 Running SQLFluff...'
+  # Allow failures now, as Review Dog handles them
   set +Eeuo pipefail
-  # shellcheck disable=SC2086,SC2046
   sqlfluff fix --force \
     $(if [[ "x${SQLFLUFF_CONFIG}" != "x" ]]; then echo "--config ${SQLFLUFF_CONFIG}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
@@ -135,7 +132,7 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   echo '::endgroup::'
 
   # SEE https://github.com/reviewdog/action-suggester/blob/master/script.sh
-  echo '::group:: Running reviewdog 🐶 ...'
+  echo '::group:: 🐶 Running ReviewDog ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
 
@@ -160,9 +157,42 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
   echo '::endgroup::'
 
   exit $sqlfluff_exit_code
-  # exit $exit_code
-# END OF fix
+  # END OF fix
+elif [[ "${SQLFLUFF_COMMAND}" == "commit" ]]; then
+  echo '::group:: 📜 Running SQLFluff Fix then committing...'
+  set +Eeuo pipefail
+  sqlfluff fix --force \
+    $(if [[ "x${SQLFLUFF_CONFIG}" != "x" ]]; then echo "--config ${SQLFLUFF_CONFIG}"; fi) \
+    $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
+    $(if [[ "x${SQLFLUFF_PROCESSES}" != "x" ]]; then echo "--processes ${SQLFLUFF_PROCESSES}"; fi) \
+    $(if [[ "x${SQLFLUFF_RULES}" != "x" ]]; then echo "--rules ${SQLFLUFF_RULES}"; fi) \
+    $(if [[ "x${SQLFLUFF_EXCLUDE_RULES}" != "x" ]]; then echo "--exclude-rules ${SQLFLUFF_EXCLUDE_RULES}"; fi) \
+    $(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
+    $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
+    $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
+    $changed_files
+  sqlfluff_exit_code=$?
+  echo "::set-output name=sqlfluff-exit-code::${sqlfluff_exit_code}"
+
+  set -Eeuo pipefail
+  echo '::endgroup::'
+
+  # Commit the changes after correcting.
+  echo '::group:: ⛙ Merging changes...'
+
+  git config user.name github-actions
+  git config user.email github-actions@github.com
+  echo "Committing."
+  git commit -a -m '🤖 CI: SQL Fluff fixes'
+  echo "Pushing to branch, ${PR_BRANCH_NAME}"
+  git push origin ${PR_BRANCH_NAME}
+
+  set -Eeuo pipefail
+  echo '::endgroup::'
+
+  exit $sqlfluff_exit_code
+  # END OF commit
 else
-  echo 'ERROR: SQLFLUFF_COMMAND must be one of lint and fix'
+  echo "ERROR: SQLFLUFF_COMMAND must be one of 'lint', 'fix', or 'commit'"
   exit 1
 fi

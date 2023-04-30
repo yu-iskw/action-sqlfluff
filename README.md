@@ -9,21 +9,31 @@
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 
-This is a github action to lint and fix SQL with [sqlfluff](https://github.com/sqlfluff/sqlfluff).
-The action has the two modes corresponding to `sqlfluff lint` and `sqlfluff fix`.
-One is to automatically leaves comments about SQL violation using [reviewdog](https://github.com/reviewdog/reviewdog)
-The other is to automatically suggests code formatting on github pull request with reviewdog too.
+This is a Github Action to lint and fix SQL on PRs with [SQLFluff](https://github.com/sqlfluff/sqlfluff).
 
-## Lint mode
-The lint mode leaves comments on github pull requests.
-Comments are pointed out by sqlfluff.
+Supports 3 operations:
+
+* **"lint"** - Runs `sqlfluff lint`
+* **"fix"** - Runs `sqlfluff fix` then makes GitHub Suggestions on the PR.
+* **"commit"** - Runs "fix" then commits those changes.
+
+This uses [ReviewDog](https://github.com/reviewdog/reviewdog) to Post comments and suggestions on the PR.
+
+## Lint Mode
+
+The lint mode leaves comments on github pull requests. Comments are pointed out by SQLFluff.
 ![github-pr-review demo (lint)](./docs/images/github-pr-review-demo-lint.png)
 
-## Fix mode
-The fix mode suggests code formatting based on `sqlfluff fix`.
+## Fix Mode
+
+Suggest mode makes GitHub Suggestions based on `sqlfluff fix`.
 ![github-pr-review demo (fix)](./docs/images/github-pr-review-demo-fix.png)
 
-## Example
+## Commit Mode
+
+Commit mode commits and pushes the changes from `sqlfluff fix` to your PR.
+
+## Example: Fix Mode
 
 ```yaml
 name: sqlfluff with reviewdog
@@ -34,14 +44,14 @@ jobs:
     name: runner / sqlfluff (github-check)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: yu-iskw/action-sqlfluff@v3
         id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           sqlfluff_version: "1.4.5"
-          sqlfluff_command: "fix" # Or "lint"
+          sqlfluff_command: "fix" # Or "lint" or "commit"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: '${{ github.workspace }}/models'
       - name: 'Show outputs (Optional)'
@@ -51,6 +61,52 @@ jobs:
           echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
 ```
 
+## Example: Commit mode
+
+This example differs slightly in that it:
+
+1. Writes the GCP-SA-Key Secret to disk, then uses that to authenticate with BigQuery. In dbt mode, SQLFluff reads some metadata from the DB.
+1. Does the Git Checkout in such a way that doesn't leave it in a detached-HEAD state. The `with:` block on `checkout@v3`.
+
+```yaml
+name: 📜 SQLFluff
+on:
+  pull_request:
+
+jobs:
+  format_fix:
+    runs-on: ubuntu-latest
+    env:
+      DBT_PROFILES_DIR: ${{ github.workspace }}/.github/ci_cd
+      PR_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - name: 🛒 Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: 🔑 Write GCP Service-Acct Key
+        env:
+          BIGQUERY_KEYFILE: ${{ secrets.BIGQUERY_KEYFILE }}
+        run: |
+          echo "$BIGQUERY_KEYFILE" > ${{ github.workspace }}/.github/ci_cd/dbt-service-account.json
+      - name: 📜 SQLFLuff
+        uses: trainual/action-sqlfluff-commits@main
+        id: lint-sql
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          sqlfluff_version: 1.4.5
+          sqlfluff_command: commit
+          templater: dbt
+          config: ${{ github.workspace }}/.sqlfluff
+          paths: ${{ github.workspace }}/models
+          extra_requirements_txt: ${{ github.workspace }}/.github/ci_cd/requirements.txt
+      - name: 🐣 Show outputs
+        shell: bash
+        run: |
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results }}' | jq -r '.'
+          echo '${{ steps.lint-sql.outputs.sqlfluff-results-rdjson }}' | jq -r '.'
+```
 
 ## NOTE
 The tested sqlfluff versions in the repositories are:
@@ -102,14 +158,14 @@ inputs:
     description: 'reviewdog version'
     required: false
     default: '0.13.0'
-  ### Flags for sqlfluff ###
+  ### Flags for SQLFluff ###
   sqlfluff_version:
     description: |
       sqlfluff version. Use the latest version if not set.
     required: false
     default: '1.4.5'
   sqlfluff_command:
-    description: 'The sub command of sqlfluff. One of lint and fix'
+    description: 'The operation to perform. One of lint, fix, and commit'
     required: false
     default: 'lint'
   paths:

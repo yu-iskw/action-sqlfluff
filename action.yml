@@ -1,5 +1,5 @@
 name: 'Run sqlfluff with reviewdog'
-description: '🐶 Run sqlfluff with reviewdog on pull requests to improve code review experience.'
+description: '🐶 Run sqlfluff with reviewdog on PRs and commit the changes.'
 author: 'yu-iskw'
 inputs:
   github_token:
@@ -46,7 +46,7 @@ inputs:
     required: false
     default: '1.4.5'
   sqlfluff_command:
-    description: 'The sub command of sqlfluff. One of lint and fix'
+    description: 'Lint, fix, or commit'
     required: false
     default: 'lint'
   paths:
