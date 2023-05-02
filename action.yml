@@ -44,7 +44,7 @@ inputs:
     description: |
       sqlfluff version. Use the latest version if not set.
     required: false
-    default: '1.4.5'
+    default: '2.0.7'
   sqlfluff_command:
     description: 'The sub command of sqlfluff. One of lint and fix'
     required: false
