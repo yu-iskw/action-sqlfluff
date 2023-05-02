@@ -51,10 +51,10 @@ echo '::endgroup::'
 # Install dbt packages
 echo '::group:: Installing dbt packages'
 if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]]; then
-  defulat_dir="$(pwd)"
+  default_dir="$(pwd)"
   cd "$INPUT_WORKING_DIRECTORY"
-  dbt deps --profiles-dir "${SCRIPT_DIR}/resources/dummy_profiles"
-  cd "$defulat_dir"
+  dbt deps
+  cd "$default_dir"
 fi
 echo '::endgroup::'
 
@@ -128,9 +128,9 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
     $changed_files
-  sqlfluff_exit_code=$?   
+  sqlfluff_exit_code=$?
   echo "name=sqlfluff-exit-code::${sqlfluff_exit_code}" >> $GITHUB_OUTPUT
-  
+
   set -Eeuo pipefail
   echo '::endgroup::'
 

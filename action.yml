@@ -141,7 +141,7 @@ outputs:
   sqlfluff-results-rdjson:
     description: 'The JSON object string of sqlfluff results'
     value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.sqlfluff-results-rdjson }}
-  reviewdog-return-code:
+  reviewdog-exit-code:
     description: 'The exit code of reviewdog'
     value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.reviewdog-return-code }}
 
