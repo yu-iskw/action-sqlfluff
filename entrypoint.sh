@@ -34,7 +34,7 @@ echo '::endgroup::'
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
+pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt" --use-deprecated=legacy-resolver
 # Make sure the version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
@@ -42,7 +42,7 @@ echo '::endgroup::'
 # Install extra python modules
 echo '::group:: Installing extra python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
-  pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
+  pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}" --use-deprecated=legacy-resolver
   # Make sure the installed modules
   pip list
 fi
@@ -51,10 +51,10 @@ echo '::endgroup::'
 # Install dbt packages
 echo '::group:: Installing dbt packages'
 if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]]; then
-  defulat_dir="$(pwd)"
+  default_dir="$(pwd)"
   cd "$INPUT_WORKING_DIRECTORY"
   dbt deps --profiles-dir "${SCRIPT_DIR}/resources/dummy_profiles"
-  cd "$defulat_dir"
+  cd "$default_dir"
 fi
 echo '::endgroup::'
 
@@ -128,9 +128,9 @@ elif [[ "${SQLFLUFF_COMMAND}" == "fix" ]]; then
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
     $changed_files
-  sqlfluff_exit_code=$?   
+  sqlfluff_exit_code=$?
   echo "name=sqlfluff-exit-code::${sqlfluff_exit_code}" >> $GITHUB_OUTPUT
-  
+
   set -Eeuo pipefail
   echo '::endgroup::'
 

@@ -12,11 +12,11 @@ jobs:
       fail-fast: false
       matrix:
         sqlfluff:
-          - "1.0.0"
-          - "1.1.0"
-          - "1.2.0"
-          - "1.3.0"
-          - "1.4.5"
+          - "2.0.7"
+        extra_requirements_txt:
+          - "testdata/test_failed_dbt/extra_requirements-1.3.txt"
+          - "testdata/test_failed_dbt/extra_requirements-1.4.txt"
+          - "testdata/test_failed_dbt/extra_requirements-1.5.txt"
         config:
           - ".sqlfluff.bigquery"
           - ".sqlfluff.postgres"
@@ -36,7 +36,7 @@ jobs:
           working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           config: "${{ github.workspace }}/testdata/test_failed_dbt/${{ matrix.config }}"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
-          extra_requirements_txt: "${{ github.workspace }}/testdata/test_failed_dbt/extra_requirements.txt"
+          extra_requirements_txt: "${{ github.workspace }}/${{ matrix.extra_requirements_txt }}"
       - name: check the exit code
         if: ${{ !success() }}
         run: echo 'The previous step should fail' && exit 1
@@ -57,11 +57,11 @@ jobs:
       fail-fast: false
       matrix:
         sqlfluff:
-          - "1.0.0"
-          - "1.1.0"
-          - "1.2.0"
-          - "1.3.0"
-          - "1.4.5"
+          - "2.0.7"
+        extra_requirements_txt:
+          - "testdata/test_failed_dbt/extra_requirements-1.3.txt"
+          - "testdata/test_failed_dbt/extra_requirements-1.4.txt"
+          - "testdata/test_failed_dbt/extra_requirements-1.5.txt"
         config:
           - ".sqlfluff.bigquery"
           - ".sqlfluff.postgres"
@@ -81,4 +81,4 @@ jobs:
           working-directory: "${{ github.workspace }}/testdata/test_failed_dbt"
           config: "${{ github.workspace }}/testdata/test_failed_dbt/${{ matrix.config }}"
           paths: '${{ github.workspace }}/testdata/test_failed_dbt/models'
-          extra_requirements_txt: "${{ github.workspace }}/testdata/test_failed_dbt/extra_requirements.txt"
+          extra_requirements_txt: "${{ github.workspace }}/${{ matrix.extra_requirements_txt }}"

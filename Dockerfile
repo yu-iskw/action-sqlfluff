@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 ENV REVIEWDOG_VERSION="v0.14.1"
 
@@ -20,6 +20,9 @@ RUN apt-get update -y \
 
 # Install reviewdog
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
+
+# Install pip
+RUN pip install --no-cache-dir --upgrade pip==23.1.2
 
 # Set the entrypoint
 COPY . "$WORKING_DIRECTORY"
