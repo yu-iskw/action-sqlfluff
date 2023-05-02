@@ -16,10 +16,11 @@ RUN apt-get update -y \
         build-essential \
         libsasl2-dev \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install reviewdog
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
+
 
 # Install pip
 RUN pip install --no-cache-dir --upgrade pip==23.0.1
