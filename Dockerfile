@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 ENV REVIEWDOG_VERSION="v0.14.1"
 
@@ -16,10 +16,13 @@ RUN apt-get update -y \
         build-essential \
         libsasl2-dev \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
 
 # Install reviewdog
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
+
+# Install pip
+RUN pip install --no-cache-dir --upgrade pip==23.0.1
 
 # Set the entrypoint
 COPY . "$WORKING_DIRECTORY"

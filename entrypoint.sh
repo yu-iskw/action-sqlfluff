@@ -34,7 +34,7 @@ echo '::endgroup::'
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
+pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt" --use-deprecated=legacy-resolver
 # Make sure the version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
@@ -42,7 +42,7 @@ echo '::endgroup::'
 # Install extra python modules
 echo '::group:: Installing extra python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
-  pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
+  pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}" --use-deprecated=legacy-resolver
   # Make sure the installed modules
   pip list
 fi
