@@ -23,7 +23,7 @@ RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/in
 
 
 # Install pip
-RUN pip install --no-cache-dir --upgrade pip==23.1.3
+RUN pip install --no-cache-dir --upgrade pip==23.1.2
 
 # Set the entrypoint
 COPY . "$WORKING_DIRECTORY"
