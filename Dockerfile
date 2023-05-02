@@ -21,7 +21,6 @@ RUN apt-get update -y \
 # Install reviewdog
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
-
 # Install pip
 RUN pip install --no-cache-dir --upgrade pip==23.1.2
 

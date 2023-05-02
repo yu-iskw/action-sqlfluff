@@ -53,7 +53,7 @@ echo '::group:: Installing dbt packages'
 if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]]; then
   default_dir="$(pwd)"
   cd "$INPUT_WORKING_DIRECTORY"
-  dbt deps
+  dbt deps --profiles-dir "${SCRIPT_DIR}/resources/dummy_profiles"
   cd "$default_dir"
 fi
 echo '::endgroup::'
