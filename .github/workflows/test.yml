@@ -12,12 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         sqlfluff:
-          - "1.0.0"
-          - "1.1.0"
-          - "1.2.0"
-          - "1.3.0"
-          - "1.4.5"
-          - "1.5.0"
+          - "2.0.7"
         config:
           - ".sqlfluff.bigquery"
           - ".sqlfluff.postgres"
@@ -58,12 +53,7 @@ jobs:
       fail-fast: false
       matrix:
         sqlfluff:
-          - "1.0.0"
-          - "1.1.0"
-          - "1.2.0"
-          - "1.3.0"
-          - "1.4.5"
-          - "1.5.0"
+          - "2.0.7"
         config:
           - ".sqlfluff.bigquery"
           - ".sqlfluff.postgres"
