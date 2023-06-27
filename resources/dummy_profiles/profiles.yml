@@ -1,0 +1,13 @@
+config:
+  partial_parse: False
+  send_anonymous_usage_stats: False
+
+default:
+  target: dummy
+  outputs:
+    dummy:
+      type: bigquery
+      method: oauth
+      project: "your-gcp-project"
+      dataset: "dbt"
+      location: "US"
