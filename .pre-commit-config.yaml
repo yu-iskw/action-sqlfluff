@@ -6,7 +6,7 @@ repos:
       - id: trailing-whitespace
       - id: check-yaml
   - repo: https://github.com/rhysd/actionlint
-    rev: main
+    rev: v1.6.25
     hooks:
       - id: actionlint
   - repo: https://github.com/hadolint/hadolint

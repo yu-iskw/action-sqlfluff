@@ -57,7 +57,7 @@ jobs:
       fail-fast: false
       matrix:
         sqlfluff:
-          - "2.0.7"
+          - "2.3.0"
         extra_requirements_txt:
           - "testdata/test_failed_dbt/extra_requirements-1.3.txt"
           - "testdata/test_failed_dbt/extra_requirements-1.4.txt"
