@@ -4,5 +4,5 @@ pre-commit>=2.0,<3.0
 # sqlfluff
 sqlfluff==${SQLFLUFF_VERSION}
 sqlfluff-templater-dbt==${SQLFLUFF_VERSION}
-
+dbt-core==1.3.6
 pytz>=2015.7
