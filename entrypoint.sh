@@ -14,7 +14,7 @@ git config --global --add safe.directory /github/workspace
 echo '::group::🐶 Get changed files'
 # The command is necessary to get changed files.
 # TODO Fetch only the target branch
-git fetch --prune --unshallow --no-tags
+git fetch --prune --depth 10000 --no-tags
 
 SQL_FILE_PATTERN="${FILE_PATTERN:?}"
 SOURCE_REFERENCE="origin/${GITHUB_PULL_REQUEST_BASE_REF:?}"
@@ -75,9 +75,10 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
     $(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
-    $changed_files |
-    tee "$lint_results"
+    $changed_files >> "$lint_results"
+
   sqlfluff_exit_code=$?
+  cat "$lint_results"
 
   echo "name=sqlfluff-results::$(cat <"$lint_results" | jq -r -c '.')" >> $GITHUB_OUTPUT # Convert to a single line
   echo "name=sqlfluff-exit-code::${sqlfluff_exit_code}" >> $GITHUB_OUTPUT
