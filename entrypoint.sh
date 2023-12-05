@@ -56,10 +56,10 @@ echo '::endgroup::'
 # Install dbt packages
 echo '::group:: Installing dbt packages'
 if [[ -f "${INPUT_WORKING_DIRECTORY}/packages.yml" ]]; then
-  defulat_dir="$(pwd)"
+  default_dir="$(pwd)"
   cd "$INPUT_WORKING_DIRECTORY"
   dbt deps --profiles-dir "${SCRIPT_DIR}/resources/dummy_profiles"
-  cd "$defulat_dir"
+  cd "$default_dir"
 fi
 echo '::endgroup::'
 
