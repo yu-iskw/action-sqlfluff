@@ -36,8 +36,8 @@ jobs:
     name: runner / sqlfluff (github-check)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: yu-iskw/action-sqlfluff@v3
+      - uses: actions/checkout@v4
+      - uses: yu-iskw/action-sqlfluff@v4
         id: lint-sql
         with:
           github_token: ${{ secrets.github_token }}
