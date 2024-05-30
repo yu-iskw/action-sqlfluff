@@ -1,5 +1,5 @@
 setup-dev:
-	SQLFLUFF_VERSION=1.2.0 pip install --force-reinstall -r requirements/requirements.txt
+	SQLFLUFF_VERSION=3.0.7 python -m pip install --force-reinstall -r requirements/requirements.txt
 	pre-commit install
 
 lint: lint-shell lint-json lint-docker
