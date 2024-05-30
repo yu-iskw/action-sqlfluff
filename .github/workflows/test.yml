@@ -24,7 +24,7 @@ jobs:
           - ".sqlfluff.snowflake"
           - ".sqlfluff.spark"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
         id: lint-sql
         with:
