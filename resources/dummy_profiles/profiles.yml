@@ -1,7 +1,3 @@
-config:
-  partial_parse: False
-  send_anonymous_usage_stats: False
-
 default:
   target: dummy
   outputs:
