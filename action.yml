@@ -1,54 +1,54 @@
-name: 'Run sqlfluff with reviewdog'
-description: '🐶 Run sqlfluff with reviewdog on pull requests to improve code review experience.'
-author: 'yu-iskw'
+name: "Run sqlfluff with reviewdog"
+description: "🐶 Run sqlfluff with reviewdog on pull requests to improve code review experience."
+author: "yu-iskw"
 inputs:
   github_token:
-    description: 'GITHUB_TOKEN'
+    description: "GITHUB_TOKEN"
     required: true
-    default: '${{ github.token }}'
+    default: "${{ github.token }}"
   github_base_ref:
     description: "Pull request target branch name"
     required: false
     default: "${{ github.base_ref }}"
   working-directory:
-    description: 'working directory'
+    description: "working directory"
     required: false
-    default: '${{ github.workspace }}'
+    default: "${{ github.workspace }}"
   ### Flags for reviewdog ###
   level:
-    description: 'Report level for reviewdog [info,warning,error]'
+    description: "Report level for reviewdog [info,warning,error]"
     required: false
-    default: 'error'
+    default: "error"
   reporter:
-    description: 'Reporter of reviewdog command [github-check,github-pr-review].'
+    description: "Reporter of reviewdog command [github-check,github-pr-review]."
     required: false
-    default: 'github-check'
+    default: "github-check"
   filter_mode:
     description: |
       Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
       Default is file.
     required: false
-    default: 'file'
+    default: "file"
   fail_on_error:
     description: |
       Exit code for reviewdog when errors are found [true,false]
       Default is `false`.
     required: false
-    default: 'false'
+    default: "false"
   reviewdog_version:
-    description: 'reviewdog version'
+    description: "reviewdog version"
     required: false
-    default: 'v0.14.0'
+    default: "v0.14.0"
   ### Flags for sqlfluff ###
   sqlfluff_version:
     description: |
       sqlfluff version. Use the latest version if not set.
     required: false
-    default: '2.3.0'
+    default: "2.3.0"
   sqlfluff_command:
-    description: 'The sub command of sqlfluff. One of lint and fix'
+    description: "The sub command of sqlfluff. One of lint and fix"
     required: false
-    default: 'lint'
+    default: "lint"
   paths:
     description: |
       PATH is the path to a sql file or directory to lint.
@@ -59,9 +59,9 @@ inputs:
     required: false
     default: '\.sql$'
   encoding:
-    description: 'Specifiy encoding to use when reading and writing files. Defaults to autodetect.'
+    description: "Specifiy encoding to use when reading and writing files. Defaults to autodetect."
     required: false
-    default: ''
+    default: ""
   config:
     description: |
       Include additional config file.
@@ -69,7 +69,7 @@ inputs:
       This argument allows you to specify an additional configuration file that overrides the standard configuration files.
       N.B. cfg format is required.
     required: false
-    default: ''
+    default: ""
   exclude-rules:
     description: |
       Exclude specific rules.
@@ -77,45 +77,45 @@ inputs:
       This could either be the allowlist, or the general set if there is no specific allowlist.
       Multiple rules can be specified with commas e.g. –exclude-rules L001,L002 will exclude violations of rule L001 and rule L002.
     required: false
-    default: ''
+    default: ""
   rules:
     description: |
       Narrow the search to only specific rules.
       For example specifying –rules L001 will only search for rule L001 (Unnecessary trailing whitespace).
       Multiple rules can be specified with commas e.g. –rules L001,L002 will specify only looking for violations of rule L001 and rule L002.
     required: false
-    default: ''
+    default: ""
   templater:
-    description: 'The templater to use'
+    description: "The templater to use"
     required: false
-    default: ''
+    default: ""
   disable-noqa:
-    description: 'Set this flag to ignore inline noqa comments.'
+    description: "Set this flag to ignore inline noqa comments."
     required: false
-    default: ''
+    default: ""
   dialect:
-    description: 'The dialect of SQL to lint'
+    description: "The dialect of SQL to lint"
     required: false
-    default: ''
-#  annotation-level:
-#    description: |
-#      When format is set to github-annotation, default annotation level.
-#      Options
-#      notice | warning | failure
-#    required: false
-#    default: ''
-#  nofail:
-#    description: |
-#      If set, the exit code will always be zero, regardless of violations found.
-#      This is potentially useful during rollout.
-#    required: false
-#    default: ''
-#  disregard-sqlfluffignores:
-#    description: 'Perform the operation regardless of .sqlfluffignore configurations'
-#    required: false
-#    default: ''
+    default: ""
+  #  annotation-level:
+  #    description: |
+  #      When format is set to github-annotation, default annotation level.
+  #      Options
+  #      notice | warning | failure
+  #    required: false
+  #    default: ''
+  #  nofail:
+  #    description: |
+  #      If set, the exit code will always be zero, regardless of violations found.
+  #      This is potentially useful during rollout.
+  #    required: false
+  #    default: ''
+  #  disregard-sqlfluffignores:
+  #    description: 'Perform the operation regardless of .sqlfluffignore configurations'
+  #    required: false
+  #    default: ''
   processes:
-    description: 'The number of parallel processes to run.'
+    description: "The number of parallel processes to run."
     required: false
     default: "2"
   # Mainly used to install dbt adapters
@@ -129,28 +129,34 @@ inputs:
       A path to your custom `requirements.txt` to install extra modules for your dbt adapters.
       Please make sure not to contain `sqlfluff` and its dependent packages, because the action can be broken by the conflicts.
     required: false
-    default: ''
+    default: ""
+  dbt_version:
+    description: |
+      dbt version. Use the 1.6.13 version if not set.
+    required: false
+    default: "1.6.13"
 
 outputs:
   sqlfluff-results:
-    description: 'The JSON object string of sqlfluff results'
+    description: "The JSON object string of sqlfluff results"
     value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.sqlfluff-results }}
   sqlfluff-exit-code:
-    description: 'The exit code of sqlfluff'
+    description: "The exit code of sqlfluff"
     value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.sqlfluff-exit-code }}
   sqlfluff-results-rdjson:
-    description: 'The JSON object string of sqlfluff results'
+    description: "The JSON object string of sqlfluff results"
     value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.sqlfluff-results-rdjson }}
   reviewdog-exit-code:
-    description: 'The exit code of reviewdog'
+    description: "The exit code of reviewdog"
     value: ${{ steps.sqlfluff-with-reviewdog-in-composite.outputs.reviewdog-return-code }}
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
   env:
     # INPUT_<VARIABLE_NAME> is not available in Composite run steps
     # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
+    DBT_VERSION: ${{ inputs.dbt_version }}
     INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
     INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
     REVIEWDOG_LEVEL: ${{ inputs.level }}
@@ -176,5 +182,5 @@ runs:
 
 # Ref: https://haya14busa.github.io/github-action-brandings/
 branding:
-  icon: 'check'
-  color: 'blue'
+  icon: "check"
+  color: "blue"

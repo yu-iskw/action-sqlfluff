@@ -2,7 +2,7 @@ setuptools>=65.5.1
 pre-commit>=2.0,<3.0
 
 # dbt
-dbt-core==1.6.13
+dbt-core==${DBT_VERSION}
 
 # sqlfluff
 sqlfluff==${SQLFLUFF_VERSION}
