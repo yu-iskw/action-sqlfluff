@@ -75,7 +75,7 @@ if [[ "${SQLFLUFF_COMMAND:?}" == "lint" ]]; then
     $(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
     $(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
     $(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
-    $changed_files >> "$lint_results"
+    $changed_files | tail -n +2 >> "$lint_results"
 
   sqlfluff_exit_code=$?
   cat "$lint_results"
