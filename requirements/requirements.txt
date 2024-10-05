@@ -1,5 +1,5 @@
 setuptools>=65.5.1
-pre-commit>=3.7,<3.8
+pre-commit>=4,<4.1
 
 # sqlfluff
 sqlfluff==${SQLFLUFF_VERSION}
