@@ -1,6 +1,6 @@
 FROM python:3.13-slim
 
-ENV REVIEWDOG_VERSION="v0.17.4"
+ENV REVIEWDOG_VERSION="v0.20.2"
 
 ENV WORKING_DIRECTORY="/workdir"
 WORKDIR "$WORKING_DIRECTORY"
@@ -22,7 +22,7 @@ RUN apt-get update -y \
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
 # Install pip
-RUN pip install --no-cache-dir --upgrade pip==23.1.2
+RUN pip install --no-cache-dir --upgrade pip==24.3.0
 
 # Set the entrypoint
 COPY . "$WORKING_DIRECTORY"
