@@ -42,7 +42,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          sqlfluff_version: "3.0.7"
+          sqlfluff_version: "3.2.5"
           sqlfluff_command: "fix" # Or "lint"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: "${{ github.workspace }}/models"
@@ -93,13 +93,13 @@ inputs:
   reviewdog_version:
     description: "reviewdog version"
     required: false
-    default: "v0.17.4"
+    default: "v0.20.2"
   ### Flags for sqlfluff ###
   sqlfluff_version:
     description: |
       sqlfluff version. Use the latest version if not set.
     required: false
-    default: "3.0.7"
+    default: "3.2.5"
   sqlfluff_command:
     description: "The sub command of sqlfluff. One of lint and fix"
     required: false
