@@ -1,15 +1,15 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v5.0.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: check-yaml
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.6.25
+    rev: v1.7.4
     hooks:
       - id: actionlint
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.12.0
+    rev: v2.13.1-beta
     hooks:
-      - id: hadolint
+      - id: hadolint-docker
