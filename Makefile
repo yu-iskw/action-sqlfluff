@@ -12,3 +12,8 @@ lint-json:
 
 lint-docker:
 	hadolint Dockerfile
+
+maintain: update-pre-commit
+
+update-pre-commit:
+	pre-commit autoupdate
