@@ -42,7 +42,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          sqlfluff_version: "3.2.5"
+          sqlfluff_version: "3.3.1"
           sqlfluff_command: "fix" # Or "lint"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: "${{ github.workspace }}/models"
