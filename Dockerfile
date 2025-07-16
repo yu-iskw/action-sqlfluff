@@ -22,6 +22,7 @@ RUN apt-get update -y \
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
 # Install pip
+COPY requirements.setup.txt "$WORKING_DIRECTORY"
 RUN pip install --no-cache-dir -r requirements.setup.txt
 
 # Set the entrypoint
