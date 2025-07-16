@@ -133,6 +133,10 @@ inputs:
       Multiple rules can be specified with commas e.g. –exclude-rules L001,L002 will exclude violations of rule L001 and rule L002.
     required: false
     default: ""
+  extra-args:
+    description: 'Extra arguments to pass directly to sqlfluff lint/fix'
+    required: false
+    default: ""
   rules:
     description: |
       Narrow the search to only specific rules.
