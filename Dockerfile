@@ -22,7 +22,7 @@ RUN apt-get update -y \
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
 # Install pip
-RUN pip install --no-cache-dir --upgrade pip==24.3.0
+RUN pip install --no-cache-dir -r requirements.setup.txt
 
 # Set the entrypoint
 COPY . "$WORKING_DIRECTORY"
