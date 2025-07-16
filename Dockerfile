@@ -25,7 +25,7 @@ RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/in
 COPY requirements.setup.txt "${WORKING_DIRECTORY}"
 RUN pip install --no-cache-dir -r requirements.setup.txt \
     && uv venv --python 3.13 "${WORKING_DIRECTORY}/.venv" \
-    && uv pip install -U setuptools
+    && uv pip install --no-cache-dir -U setuptools
 ENV PATH="${WORKING_DIRECTORY}/.venv/bin:$PATH"
 
 # Set the entrypoint
