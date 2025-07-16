@@ -119,7 +119,7 @@ elif [[ ${SQLFLUFF_COMMAND} == "fix" ]]; then
 	# Allow failures now, as reviewdog handles them
 	set +Eeuo pipefail
 	# shellcheck disable=SC2086,SC2046
-	sqlfluff fix \
+	uv run sqlfluff fix \
 		$(if [[ "x${SQLFLUFF_CONFIG}" != "x" ]]; then echo "--config ${SQLFLUFF_CONFIG}"; fi) \
 		$(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
 		$(if [[ "x${SQLFLUFF_PROCESSES}" != "x" ]]; then echo "--processes ${SQLFLUFF_PROCESSES}"; fi) \
