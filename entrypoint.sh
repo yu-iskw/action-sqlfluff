@@ -26,15 +26,17 @@ echo "$changed_files"
 # Halt the job
 if [[ ${changed_files} == "" ]]; then
 	echo "There is no changed files. The action doesn't scan files."
-	echo "name=sqlfluff-exit-code::0" >>$GITHUB_OUTPUT
-	echo "name=reviewdog-return-code::0" >>$GITHUB_OUTPUT
+	echo "name=sqlfluff-exit-code::0" >>"${GITHUB_OUTPUT}"
+	echo "name=reviewdog-return-code::0" >>"${GITHUB_OUTPUT}"
 	exit 0
 fi
 echo '::endgroup::'
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt" --use-deprecated=legacy-resolver
+uv pip install --no-cache-dir -U \
+	sqlfluff=="${SQLFLUFF_VERSION:?}" \
+	sqlfluff-templater-dbt=="${SQLFLUFF_VERSION:?}"
 # Make sure the version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
@@ -42,9 +44,9 @@ echo '::endgroup::'
 # Install extra python modules
 echo '::group:: Installing extra python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
-	pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}" --use-deprecated=legacy-resolver
+	uv pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
 	# Make sure the installed modules
-	pip list
+	uv pip list
 fi
 echo '::endgroup::'
 
@@ -118,7 +120,7 @@ elif [[ ${SQLFLUFF_COMMAND} == "fix" ]]; then
 	# Allow failures now, as reviewdog handles them
 	set +Eeuo pipefail
 	# shellcheck disable=SC2086,SC2046
-	sqlfluff fix \
+	uv run sqlfluff fix \
 		$(if [[ "x${SQLFLUFF_CONFIG}" != "x" ]]; then echo "--config ${SQLFLUFF_CONFIG}"; fi) \
 		$(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
 		$(if [[ "x${SQLFLUFF_PROCESSES}" != "x" ]]; then echo "--processes ${SQLFLUFF_PROCESSES}"; fi) \

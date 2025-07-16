@@ -3,7 +3,7 @@ FROM python:3.13-slim
 ENV REVIEWDOG_VERSION="v0.20.3"
 
 ENV WORKING_DIRECTORY="/workdir"
-WORKDIR "$WORKING_DIRECTORY"
+WORKDIR "${WORKING_DIRECTORY}"
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
@@ -22,7 +22,10 @@ RUN apt-get update -y \
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
 # Install pip
-RUN pip install --no-cache-dir --upgrade pip==24.3.0
+COPY requirements.setup.txt "${WORKING_DIRECTORY}"
+RUN pip install --no-cache-dir -r requirements.setup.txt \
+    && uv venv --python 3.13 "${WORKING_DIRECTORY}/.venv"
+ENV PATH="${WORKING_DIRECTORY}/.venv/bin:$PATH"
 
 # Set the entrypoint
 COPY . "$WORKING_DIRECTORY"

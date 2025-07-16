@@ -14,3 +14,6 @@ maintain: update-pre-commit
 
 update-pre-commit:
 	pre-commit autoupdate
+
+build-docker:
+	docker build -t action-sqlfluff:dev .
