@@ -34,7 +34,7 @@ echo '::endgroup::'
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-uv pip install --no-cache-dir -U \
+uv pip install -U \
 	sqlfluff=="${SQLFLUFF_VERSION:?}" \
 	sqlfluff-templater-dbt=="${SQLFLUFF_VERSION:?}"
 # Make sure the version of sqlfluff
@@ -44,7 +44,7 @@ echo '::endgroup::'
 # Install extra python modules
 echo '::group:: Installing extra python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
-	uv pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
+	uv pip install -r "${EXTRA_REQUIREMENTS_TXT}"
 	# Make sure the installed modules
 	uv pip list
 fi
