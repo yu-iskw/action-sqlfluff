@@ -4,7 +4,6 @@
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
-PIP="uv pip"
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN:?}"
 
@@ -35,7 +34,7 @@ echo '::endgroup::'
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-"${PIP}" install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt" --use-deprecated=legacy-resolver
+uv pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt" --use-deprecated=legacy-resolver
 # Make sure the version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
@@ -43,9 +42,9 @@ echo '::endgroup::'
 # Install extra python modules
 echo '::group:: Installing extra python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
-	"${PIP}" install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}" --use-deprecated=legacy-resolver
+	uv pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}" --use-deprecated=legacy-resolver
 	# Make sure the installed modules
-	"${PIP}" list
+	uv pip list
 fi
 echo '::endgroup::'
 
