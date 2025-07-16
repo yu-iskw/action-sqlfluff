@@ -26,15 +26,17 @@ echo "$changed_files"
 # Halt the job
 if [[ ${changed_files} == "" ]]; then
 	echo "There is no changed files. The action doesn't scan files."
-	echo "name=sqlfluff-exit-code::0" >>$GITHUB_OUTPUT
-	echo "name=reviewdog-return-code::0" >>$GITHUB_OUTPUT
+	echo "name=sqlfluff-exit-code::0" >>"${GITHUB_OUTPUT}"
+	echo "name=reviewdog-return-code::0" >>"${GITHUB_OUTPUT}"
 	exit 0
 fi
 echo '::endgroup::'
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-uv pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
+uv pip install --no-cache-dir -U \
+	sqlfluff=="${SQLFLUFF_VERSION:?}" \
+	sqlfluff-templater-dbt=="${SQLFLUFF_VERSION:?}"
 # Make sure the version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
