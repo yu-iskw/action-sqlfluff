@@ -34,7 +34,7 @@ echo '::endgroup::'
 
 # Install sqlfluff
 echo '::group::🐶 Installing sqlfluff ... https://github.com/sqlfluff/sqlfluff'
-uv pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt" --use-deprecated=legacy-resolver
+uv pip install --no-cache-dir -r "${SCRIPT_DIR}/requirements/requirements.txt"
 # Make sure the version of sqlfluff
 sqlfluff --version
 echo '::endgroup::'
