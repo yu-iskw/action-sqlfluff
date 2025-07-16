@@ -4,3 +4,5 @@ dbt-bigquery>=1.8,<1.9
 dbt-redshift>=1.8,<1.9
 dbt-snowflake>=1.8,<1.9
 dbt-spark[pyHive]>=1.8,<1.9
+
+elementary-data[bigquery]>=0.15.0
