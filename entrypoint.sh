@@ -44,7 +44,7 @@ echo '::endgroup::'
 # Install extra python modules
 echo '::group:: Installing extra python modules'
 if [[ "x${EXTRA_REQUIREMENTS_TXT}" != "x" ]]; then
-	uv pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}" --use-deprecated=legacy-resolver
+	uv pip install --no-cache-dir -r "${EXTRA_REQUIREMENTS_TXT}"
 	# Make sure the installed modules
 	uv pip list
 fi
