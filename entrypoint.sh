@@ -77,6 +77,7 @@ if [[ ${SQLFLUFF_COMMAND:?} == "lint" ]]; then
 		$(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
 		$(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
 		$(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
+		${SQLFLUFF_EXTRA_ARGS} \
 		$changed_files |
 		tee "$lint_results"
 	sqlfluff_exit_code=$?
@@ -129,6 +130,7 @@ elif [[ ${SQLFLUFF_COMMAND} == "fix" ]]; then
 		$(if [[ "x${SQLFLUFF_TEMPLATER}" != "x" ]]; then echo "--templater ${SQLFLUFF_TEMPLATER}"; fi) \
 		$(if [[ "x${SQLFLUFF_DISABLE_NOQA}" != "x" ]]; then echo "--disable-noqa ${SQLFLUFF_DISABLE_NOQA}"; fi) \
 		$(if [[ "x${SQLFLUFF_DIALECT}" != "x" ]]; then echo "--dialect ${SQLFLUFF_DIALECT}"; fi) \
+		${SQLFLUFF_EXTRA_ARGS} \
 		$changed_files
 	sqlfluff_exit_code=$?
 	echo "name=sqlfluff-exit-code::${sqlfluff_exit_code}" >>$GITHUB_OUTPUT

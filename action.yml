@@ -78,6 +78,10 @@ inputs:
       Multiple rules can be specified with commas e.g. –exclude-rules L001,L002 will exclude violations of rule L001 and rule L002.
     required: false
     default: ""
+  extra-args:
+    description: 'Extra arguments to pass directly to sqlfluff lint/fix'
+    required: false
+    default: ""
   rules:
     description: |
       Narrow the search to only specific rules.
@@ -167,6 +171,7 @@ runs:
     SQLFLUFF_PATHS: ${{ inputs.paths }}
     SQLFLUFF_PROCESSES: ${{ inputs.processes }}
     SQLFLUFF_EXCLUDE_RULES: ${{ inputs.exclude-rules }}
+    SQLFLUFF_EXTRA_ARGS: ${{ inputs.extra-args }}
     SQLFLUFF_RULES: ${{ inputs.rules }}
     SQLFLUFF_TEMPLATER: ${{ inputs.templater }}
     SQLFLUFF_DISABLE_NOQA: ${{ inputs.disable-noqa }}
