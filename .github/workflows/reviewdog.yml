@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: reviewdog/action-alex@v1
+      - uses: reviewdog/action-alex@6083b8ca333981fa617c6828c5d8fb21b13d916b # v1
         with:
           reporter: github-check
           level: warning
