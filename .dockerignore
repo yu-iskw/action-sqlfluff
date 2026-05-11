@@ -5,3 +5,10 @@ logs/
 dbt_modules/
 
 .DS_Store
+
+testdata/
+.vscode/
+docs/
+.venv/
+.trunk/
+renovate.json

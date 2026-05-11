@@ -1,0 +1,6 @@
+dbt-core>=1.9,<1.10
+dbt-postgres>=1.9,<1.10
+dbt-bigquery>=1.9,<1.10
+dbt-redshift>=1.9,<1.10
+dbt-snowflake>=1.9,<1.10
+dbt-spark[pyHive]>=1.9,<1.10
