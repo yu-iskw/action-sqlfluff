@@ -12,17 +12,16 @@ jobs:
       fail-fast: false
       matrix:
         sqlfluff:
-          - "3.2.5"
+          - "4.1.0"
         extra_requirements_txt:
-          - "testdata/test_failed_dbt/extra_requirements-1.6.txt"
-          - "testdata/test_failed_dbt/extra_requirements-1.7.txt"
-          - "testdata/test_failed_dbt/extra_requirements-1.8.txt"
+          - testdata/test_failed_dbt/extra_requirements-1.8.txt
+          - testdata/test_failed_dbt/extra_requirements-1.9.txt
         config:
-          - ".sqlfluff.bigquery"
-          - ".sqlfluff.postgres"
-          - ".sqlfluff.redshift"
-          - ".sqlfluff.snowflake"
-          - ".sqlfluff.spark"
+          - .sqlfluff.bigquery
+          - .sqlfluff.postgres
+          - .sqlfluff.redshift
+          - .sqlfluff.snowflake
+          - .sqlfluff.spark
     steps:
       - uses: actions/checkout@v6
       - uses: ./
@@ -40,7 +39,7 @@ jobs:
       - name: check the exit code
         if: ${{ !success() }}
         run: echo 'The previous step should fail' && exit 1
-      - name: "Test outputs"
+      - name: Test outputs
         if: always()
         shell: bash
         run: |
@@ -57,17 +56,17 @@ jobs:
       fail-fast: false
       matrix:
         sqlfluff:
-          - "3.2.5"
+          - 3.2.5
+          - 4.1.0
         extra_requirements_txt:
-          - "testdata/test_failed_dbt/extra_requirements-1.6.txt"
-          - "testdata/test_failed_dbt/extra_requirements-1.7.txt"
-          - "testdata/test_failed_dbt/extra_requirements-1.8.txt"
+          - testdata/test_failed_dbt/extra_requirements-1.8.txt
+          - testdata/test_failed_dbt/extra_requirements-1.9.txt
         config:
-          - ".sqlfluff.bigquery"
-          - ".sqlfluff.postgres"
-          - ".sqlfluff.redshift"
-          - ".sqlfluff.snowflake"
-          - ".sqlfluff.spark"
+          - .sqlfluff.bigquery
+          - .sqlfluff.postgres
+          - .sqlfluff.redshift
+          - .sqlfluff.snowflake
+          - .sqlfluff.spark
     steps:
       - uses: actions/checkout@v6
       - uses: ./

@@ -42,7 +42,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          sqlfluff_version: "3.3.1"
+          sqlfluff_version: "4.1.0"
           sqlfluff_command: "fix" # Or "lint"
           config: "${{ github.workspace }}/.sqlfluff"
           paths: "${{ github.workspace }}/models"
@@ -97,9 +97,9 @@ inputs:
   ### Flags for sqlfluff ###
   sqlfluff_version:
     description: |
-      sqlfluff version. Use the latest version if not set.
+      sqlfluff version (pinned default). Set this input to override, for example to stay on SQLFluff 3.x.
     required: false
-    default: "3.2.5"
+    default: "4.1.0"
   sqlfluff_command:
     description: "The sub command of sqlfluff. One of lint and fix"
     required: false
