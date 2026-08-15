@@ -1,8 +1,13 @@
 name: Test
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths-ignore:
       - "**/*.md"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   test-lint:
@@ -13,9 +18,7 @@ jobs:
       matrix:
         sqlfluff:
           - "4.1.0"
-        extra_requirements_txt:
-          - testdata/test_failed_dbt/extra_requirements-1.8.txt
-          - testdata/test_failed_dbt/extra_requirements-1.9.txt
+        extra_requirements_txt: ${{ fromJSON(github.event.action == 'synchronize' && '["testdata/test_failed_dbt/extra_requirements-1.9.txt"]' || '["testdata/test_failed_dbt/extra_requirements-1.8.txt","testdata/test_failed_dbt/extra_requirements-1.9.txt"]') }}
         config:
           - .sqlfluff.bigquery
           - .sqlfluff.postgres
@@ -55,12 +58,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sqlfluff:
-          - 3.2.5
-          - 4.1.0
-        extra_requirements_txt:
-          - testdata/test_failed_dbt/extra_requirements-1.8.txt
-          - testdata/test_failed_dbt/extra_requirements-1.9.txt
+        sqlfluff: ${{ fromJSON(github.event.action == 'synchronize' && '["4.1.0"]' || '["3.2.5","4.1.0"]') }}
+        extra_requirements_txt: ${{ fromJSON(github.event.action == 'synchronize' && '["testdata/test_failed_dbt/extra_requirements-1.9.txt"]' || '["testdata/test_failed_dbt/extra_requirements-1.8.txt","testdata/test_failed_dbt/extra_requirements-1.9.txt"]') }}
         config:
           - .sqlfluff.bigquery
           - .sqlfluff.postgres
