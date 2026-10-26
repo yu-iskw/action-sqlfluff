@@ -44,7 +44,7 @@ inputs:
     description: |
       sqlfluff version (pinned default). Set this input to override, for example to stay on SQLFluff 3.x.
     required: false
-    default: "4.1.0"
+    default: "4.0.0"
   sqlfluff_command:
     description: "The sub command of sqlfluff. One of lint and fix"
     required: false
